@@ -81,8 +81,13 @@ abstract class AbstractGame {
   }
 
   abstract initialize():void ;
+  abstract onTouchStart(e:TouchEvent):void;
+  abstract onTouchMove(e: TouchEvent):void;
+  abstract onTouchEnd(e:TouchEvent):void;
 
   handleCanvasTouchStart(e: TouchEvent):void {
+    
+    this.onTouchStart(e)
     const x = e.changedTouches[0].clientX
     const y = e.changedTouches[0].clientY
    
@@ -98,6 +103,7 @@ abstract class AbstractGame {
 
   handleCanvasTouchMove(e: TouchEvent):void {
     
+    this.onTouchMove(e)
     this.elements.forEach( ele => {
       if(ele.getIsTouching()) {
         ele.onTouchMove(e)
@@ -106,6 +112,7 @@ abstract class AbstractGame {
   }
 
  handleCanvsToucheEnd(e: TouchEvent):void {
+   this.onTouchEnd(e)
   this.elements.forEach( ele => {
     if(ele.getIsTouching()) {
       ele.onTouchEnd(e)

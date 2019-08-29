@@ -1,6 +1,4 @@
-import GameElement from './interfaces/game-element'
 import AbstractGame from './abstracts/abstract-game'
-import EventDrivenElement from './interfaces/event-driven-element'
 import ClassifiedTrashBin from './classified-trash-bin';
 import ClassifiedTrash from './classified-trash';
 
@@ -29,13 +27,11 @@ class TrashGame extends AbstractGame {
     this.bins.push(bin)
   }
 
-
-  handleCanvasTouchStart(e: TouchEvent): void {
-    super.handleCanvasTouchStart(e)
+  onTouchStart(e: TouchEvent): void {
+    
   }
 
-  handleCanvasTouchMove(e: TouchEvent): void {
-    super.handleCanvasTouchMove(e)
+  onTouchMove(e: TouchEvent): void {
     for(let i = 0; i < this.trashes.length; i++ ) {
       for(let j = 0; j < this.bins.length; j++) {
         if(this.bins[j].objectIn(this.trashes[i])) {
@@ -45,13 +41,12 @@ class TrashGame extends AbstractGame {
         }
       }
     }
-
-
   }
 
-  handleCanvsToucheEnd(e: TouchEvent): void {
-    super.handleCanvsToucheEnd(e)
+  onTouchEnd(e: TouchEvent): void {
+    
   }
+
 }
 
 export default TrashGame

@@ -41,7 +41,6 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
     if(x >= this.location.x && x <= this.location.x + this.outline.x){
       if(y >= this.location.y && y <= this.location.y + this.outline.y)
       {
-        
         return true 
       }
     }
