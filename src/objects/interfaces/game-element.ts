@@ -1,0 +1,9 @@
+import Point from '../point'
+
+// any of 'the game' has to implement this interface 
+interface GameElement {
+  draw(ctx: CanvasRenderingContext2D):void;
+  move(point: Point):void;
+}
+
+export default GameElement
