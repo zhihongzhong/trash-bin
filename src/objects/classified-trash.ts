@@ -58,7 +58,11 @@ class ClassifiedTrash  extends AbstractEventDrivenElements {
   }  
 
   draw(ctx: CanvasRenderingContext2D): void {
-    ctx.drawImage(this.image, this.location.x, this.location.y, this.outline.x, this.outline.y)
+    const width = this.image.width 
+    const height = this.image.height
+    const ratio = width / height 
+
+    ctx.drawImage(this.image, this.location.x, this.location.y, this.outline.x / ratio, this.outline.y)
   }
 
 

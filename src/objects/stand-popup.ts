@@ -12,25 +12,31 @@ class StandPopup extends AbstractEventDrivenElements implements AbstractPopup {
   
   showing:boolean;
   image: HTMLImageElement 
+  imageOutline:Point 
 
   constructor(location:Point, outline:Point) {
     super(location, outline)
+    this.imageOutline = new Point(0,0)
     this.showing = false
   }
 
-  show(imgStr:string, outline: Point): void {
-    this.image = new Image(outline.x, outline.y)
-    this.image.src = imgStr
+  show(img:HTMLImageElement, outline: Point): void {
+    this.image = img
+    this.imageOutline = new Point(outline.x, outline.y)
     this.showing = true
   }
 
   // swipe the object from canvas using showing variable
   hide(): void {
     this.showing = false 
+    //this.outline = new Point(0,0)
   }
 
   onTouchStart(e: TouchEvent): void {
-    this.hide()
+    if(this.showing) {
+      e.stopPropagation()
+      this.hide()
+    }
   }  
 
   onTouchMove(e: TouchEvent): void {
@@ -42,14 +48,22 @@ class StandPopup extends AbstractEventDrivenElements implements AbstractPopup {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
+    
     if(!this.showing) return 
-    ctx.fillStyle= "RGBA(0,0,0,0.5)"
+
+    const width = this.image.width
+    const height = this.image.height
+    const ratio = width / height 
+
+    this.imageOutline.y = this.imageOutline.x / ratio
+
+    ctx.fillStyle= "rgba(0,0,0,0.5)"
     ctx.fillRect(this.location.x, this.location.y, this.outline.x, this.outline.y)
     
     let leftOffset:number, topOffset:number = 0 
-    leftOffset = this.outline.x / 2 - this.image.width / 2 + this.location.x 
-    topOffset = this.outline.y / 2 - this.image.height / 2 + this.location.y
-    ctx.drawImage(this.image, leftOffset, topOffset)
+    leftOffset = this.outline.x / 2 - this.imageOutline.x / 2 + this.location.x 
+    topOffset = this.outline.y / 2 - this.imageOutline.y / 2 + this.location.y
+    ctx.drawImage(this.image, leftOffset, topOffset,this.imageOutline.x, this.imageOutline.y)
 
   }
   

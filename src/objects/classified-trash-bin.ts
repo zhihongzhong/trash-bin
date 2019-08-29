@@ -3,7 +3,6 @@ import AbstractTrashBin from './abstracts/abstract-trash-bin'
 import ClassifiedTrash from './classified-trash'
 
 
-
 class ClassifiedTrashBin extends AbstractTrashBin {
 
   id: number
@@ -27,15 +26,12 @@ class ClassifiedTrashBin extends AbstractTrashBin {
   }
   
   onTouchStart(e: TouchEvent): void {
-    console.log(e)
   }
 
   onTouchMove(e: TouchEvent): void {
-    
   }
 
   onTouchEnd(e: TouchEvent): void {
-    
   }
 
   collision(piece: ClassifiedTrash): void {
@@ -43,6 +39,8 @@ class ClassifiedTrashBin extends AbstractTrashBin {
 
 
   draw(ctx: CanvasRenderingContext2D):void{
+    
+    
     ctx.drawImage(this.currentImage,this.location.x, this.location.y,
       this.outline.x, this.outline.y)
   }

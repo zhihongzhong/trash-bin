@@ -1,6 +1,6 @@
 import Point from '../point'
 
 export default interface AbstractPopup {
-  show(imgStr:string, outline:Point):void 
+  show(img:HTMLImageElement, outline:Point):void 
   hide():void
 }

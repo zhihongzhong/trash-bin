@@ -53,8 +53,9 @@ abstract class AbstractGame {
     this.canvas.addEventListener("touchend", this.handleCanvsToucheEnd.bind(this))
   }
 
-  showPopup(popInfo: ShowPopup) {
-
+  showPopup(width:number, height:number, img:HTMLImageElement):void {
+    
+    this.popup.show(img,new Point(this.IW(width),this.IH(height)))
   }
   // inject popup here 
   // correct the scale here 
@@ -91,12 +92,15 @@ abstract class AbstractGame {
   render():void {
    const ctx: CanvasRenderingContext2D = this.ctx
 
+   
    // render background first 
    this.backgrounds.forEach((b)=> b.draw(ctx))
 
    this.elements.forEach(
      e => e.draw(ctx)
    )
+
+   this.popup.draw(ctx)
    requestAnimationFrame(this.render.bind(this))
   }
 
@@ -133,15 +137,19 @@ abstract class AbstractGame {
     }
 
     let i = 0
-    this.interruptEndTimer = false 
+    this.interruptStartTimer = false 
     
+    if(this.popup.inspectTouch(new Point(x,y))) {
+      this.popup.onTouchStart(e)
+    }
+
     const _internalHandleCanvasTouchStart = () => {
       if(this.elements[i].inspectTouch(new Point(x, y ))) {
         this.elements[i].onTouchStart(ne)
         this.elements[i].setTouching(true)
       }
       i += 1
-      if(!this.interruptStartTimer && i < this.elements.length-1) {
+      if(!this.interruptStartTimer && i <= this.elements.length-1) {
         setTimeout(_internalHandleCanvasTouchStart,10)
       }
         
@@ -161,14 +169,16 @@ abstract class AbstractGame {
 
     let i = 0 
     this.interruptMoveTimer = false 
-    
+
+    this.popup.onTouchMove(e)
+
     const _internalHandleCanvasTouchMove = () =>{
   
       if(this.elements[i].getIsTouching()) {
         this.elements[i].onTouchMove(ne)
       }
       i+=1 
-      if(!this.interruptMoveTimer && i < this.elements.length-1)
+      if(!this.interruptMoveTimer && i <= this.elements.length-1)
         setTimeout(_internalHandleCanvasTouchMove,10)
     }
     
@@ -187,7 +197,8 @@ abstract class AbstractGame {
 
   let i = 0
   this.interruptEndTimer = false 
-
+  
+  this.popup.onTouchEnd(e)
   const _internalHandleCanvasTouchEnd = () =>{
       
       if(this.elements[i].getIsTouching()) {
@@ -195,7 +206,7 @@ abstract class AbstractGame {
         this.elements[i].setTouching(false)
       }
       i +=1
-      if(!this.interruptEndTimer && i < this.elements.length-1) {
+      if(!this.interruptEndTimer && i <= this.elements.length-1) {
         setTimeout(_internalHandleCanvasTouchEnd, 10);
       }
     }

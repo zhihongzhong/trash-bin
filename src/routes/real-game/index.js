@@ -21,11 +21,25 @@ import img_bot from '../../assets/bot.jpg'
 
 import img_sndon from '../../assets/sndon.png'
 import img_sndoff from '../../assets/sndoff.png'
+
+import img_prompt from '../../assets/prompt.png'
+import img_prompt2 from '../../assets/prompt.jpg'
+
+import img_gongyi from '../../assets/gongyi.png'
+import img_story from '../../assets/story.png'
+
 import img_C2 from '../../assets/C2.1.png'
+
+import img_p1 from '../../assets/p1.png'
+import img_p2 from '../../assets/p2.png'
+import img_p3 from '../../assets/p3.png'
+import img_p4 from '../../assets/p4.png'
 
 import Background from '../../objects/background';
 import MusicWidget from '../../objects/music-widget';
 import Point from '../../objects/point';
+import HarmfulTrashBin from '../../objects/harmful-trash-bin';
+import TipWidget from '../../objects/tip-widget';
 
 class RealGame extends Component {
   constructor(props) {
@@ -55,24 +69,27 @@ class RealGame extends Component {
   componentDidMount() {
     this.game = new TrashGame(this.canvas)
     
-    const t1 = new ClassifiedTrashBin(10,[img_t1,img_t1_1],
+    const t1 = new HarmfulTrashBin(10,[img_t1,img_t1_1],
       {x: 2, y: 78},{x: 20, y: 20
-    })
+    },img_p1)
 
-    const t2 = new ClassifiedTrashBin(20,[img_t2, img_t2_1],
+    const t2 = new HarmfulTrashBin(20,[img_t2, img_t2_1],
       {x: 28,y: 78},{x: 20,y: 20
-    })
+    },img_p2)
 
-    const t3 = new ClassifiedTrashBin(30,[img_t3, img_t3_1],
+    const t3 = new HarmfulTrashBin(30,[img_t3, img_t3_1],
       {x: 53,y: 78},{x: 20,y: 20
-    })
+    },img_p3)
 
-    const t4 = new ClassifiedTrashBin(40,[img_t4, img_t4_1],
+    const t4 = new HarmfulTrashBin(40,[img_t4, img_t4_1],
       {x: 77,y: 78},{x: 20,y: 20
-    })
+    },img_p4)
 
     
     const musicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff)
+    const tipWidget = new TipWidget(new Point(85,12),new Point(15,5),img_prompt,img_prompt2)
+    const storyWidget = new TipWidget(new Point(85,20), new Point(15,5),img_gongyi,img_story)
+
     const bg1 = new Background({x:0, y: 0},{x:100,y: 100},img_bg)
     const bg2 = new Background({x:0, y: 70},{x:100,y: 30},img_bot)
     const trash = new ClassifiedTrash(10, new Point(40,30),new Point(35, 20),img_C2)
@@ -80,6 +97,9 @@ class RealGame extends Component {
     this.game.addBackground(bg2)
 
     this.game.addElement(musicWidget)
+    this.game.addElement(tipWidget)
+    this.game.addElement(storyWidget)
+
     this.game.addTrash(trash)
     this.game.addTrashBin(t1)
     this.game.addTrashBin(t2)
@@ -88,22 +108,7 @@ class RealGame extends Component {
 
     
     this.game.render()
-    // this.popup = new Popup(this.pop, "YOU!! GOTTA BE WRONG","香蕉皮，属于可降解的湿垃圾",img_banana, "香蕉", this.initialize.bind(this))
-    // const winWidth = document.documentElement.clientWidth || document.body.clientWidth
-    // const winHeight = document.documentElement.clientHeight || document.body.clientHeight
 
-    // this.canvas.width = winWidth  - 1
-    // this.canvas.height = winHeight - 1
-
-    // this.ctx = this.canvas.getContext("2d")
-
-    // this.width = winWidth
-    // this.height = winHeight 
-
-    // this.canvas.addEventListener("touchstart",this.handleCanvasToucheStart.bind(this))
-    // this.canvas.addEventListener("touchmove", this.handleCanvasTouchMove.bind(this))
-    // this.canvas.addEventListener("touchend", this.handleCanvasTouchEnd.bind(this))
-    // this.initialize()
   }
 
   
