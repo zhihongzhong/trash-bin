@@ -10,12 +10,20 @@ export default interface EventDrivenElement extends GameElement {
 
   getIsTouching():boolean 
   setTouching(touch:boolean):void
-  // callPopup(show:ShowPopup):void;
   injectPopup(popup:ShowPopup):void
 
   getOutline():Point;
-  setOutline(outline:Point):void;
+  setOutline(outline:Point):void
 
-  getLocation():Point;
-  setLocation(location:Point):void;
+  getLocation():Point
+  setLocation(location:Point):void
+
+  beforeAddToContainer():void
+  afterAddToContainer():void
+
+  getWidthRatio():number
+  getHeightRatio():number 
+  setWidghRatio(ratio:number):void
+  setHeightRatio(ratio:number):void
+
 }

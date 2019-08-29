@@ -3,6 +3,18 @@ import Point from '../point'
 import ShowPopup from "../interfaces/show-popup";
 
 abstract class AbstractEventDrivenElements implements EventDrivenElement {
+  getWidthRatio(): number {
+    return this.widthRatio
+  }
+  getHeightRatio(): number {
+    return this.heightRatio
+  }
+  setWidghRatio(ratio: number): void {
+    this.widthRatio = ratio
+  }
+  setHeightRatio(ratio: number): void {
+    this.heightRatio = ratio
+  }
   
   
   location:Point;
@@ -10,6 +22,9 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
   private isTouching:boolean;
   showModel:ShowPopup;
 
+  protected widthRatio:number 
+  protected heightRatio:number 
+  
   constructor(location: Point, outline:Point) {
     this.location = new Point(location.x, location.y)
     this.outline = new Point( outline.x, outline.y)
@@ -20,6 +35,14 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
   abstract onTouchEnd(e: TouchEvent): void;
   abstract draw(ctx: CanvasRenderingContext2D):void;
   abstract move(point: Point): void;
+
+  beforeAddToContainer():void{
+
+  }
+  
+  afterAddToContainer():void{
+
+  }
 
   getOutline(): Point {
     return this.outline

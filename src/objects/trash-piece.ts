@@ -1,9 +1,20 @@
 
 
-import AbstractTrash from './interfaces/abstract-trash'
-import Point from './point'
 
-class TrashPiece implements AbstractTrash{
+import Point from './point'
+import AbstractEventDrivenElements from './abstracts/abstract-event-driven-element';
+import GameElement from './interfaces/game-element';
+
+class TrashPiece extends AbstractEventDrivenElements {
+  onTouchStart(e: TouchEvent): void {
+    throw new Error("Method not implemented.");
+  }
+  onTouchMove(e: TouchEvent): void {
+    throw new Error("Method not implemented.");
+  }
+  onTouchEnd(e: TouchEvent): void {
+    throw new Error("Method not implemented.");
+  }
 
   location: Point;
   velocity:Point;
@@ -14,7 +25,8 @@ class TrashPiece implements AbstractTrash{
   width: number
   height: number
 
-  constructor(location: Point, velocity:Point, acceleration:Point) {  
+  constructor(location: Point, outline:Point,velocity:Point, acceleration:Point) {  
+    super(location,outline)
     this.location =new Point(location.x,location.y);
     this.velocity =new Point(velocity.x, velocity.y);
     this.acceleration = new Point(acceleration.x, acceleration.y);
@@ -36,9 +48,12 @@ class TrashPiece implements AbstractTrash{
   }
   
   draw(ctx: CanvasRenderingContext2D):void {
+    this.move()
+    this.reachbound(this.getWidthRatio() * 100, this.getHeightRatio() * 100)
+ 
     ctx.strokeStyle = "#000"
     ctx.beginPath()
-    ctx.arc(this.location.x,this.location.y,20,0,2*Math.PI);
+    ctx.arc(this.location.x,this.location.y,this.outline.x,0,2*Math.PI);
     ctx.closePath()
     ctx.stroke()
   }

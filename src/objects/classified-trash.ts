@@ -1,61 +1,66 @@
 import AbstractTrash from './interfaces/abstract-trash'
 import Point from './point';
-import Popup from './popup'
 
 import AbstractEventDrivenElements from './abstracts/abstract-event-driven-element';
 
 class ClassifiedTrash  extends AbstractEventDrivenElements {
 
   image: HTMLImageElement
+  imageWrong: HTMLImageElement
+
   id: number
-  private selected: boolean
-  
+
   private touchStartX:number 
   private touchStartY:number 
-
-  constructor(id:number, location: Point, outline:Point, imageStr: string) {
+  private originalLocation:Point 
+  constructor(id:number, location: Point, outline:Point, imageStr: string,imgWrongSrc:string) {
     super(location, outline)
 
     this.id = id 
     this.image = new Image()
     this.image.src = imageStr 
-    this.selected = false 
+    
+    this.imageWrong = new Image() 
+    this.imageWrong.src = imgWrongSrc
+
+    this.originalLocation = new Point(0,0 )
 
     this.touchStartX = 0
     this.touchStartY = 0
+
   }
   
+  afterAddToContainer() {
+    super.afterAddToContainer()
+    this.originalLocation.x = this.location.x 
+    this.originalLocation.y = this.location.y
+
+  }
   onTouchStart(e: TouchEvent): void {
+    e.stopPropagation()
     this.touchStartX = e.changedTouches[0].clientX
     this.touchStartY = e.changedTouches[0].clientY
   }
 
   onTouchMove(e: TouchEvent): void {
-    
     const x = e.changedTouches[0].clientX 
     const y = e.changedTouches[0].clientY
-    this.move(new Point(x - this.touchStartX, y - this.touchStartY))
 
+    this.move(new Point(x - this.touchStartX, y - this.touchStartY))
     this.touchStartX = x
     this.touchStartY = y
   }
 
   onTouchEnd(e: TouchEvent): void {
+
     // throw new Error("Method not implemented.");
   }
 
-  select() {
-    this.selected = true 
-  }
 
-  unselect() {
-    this.selected = false 
-  }
 
   move(point: Point): void {
-    if(this.select)
-      this.location.add(point)
-  }  
+    this.location.add(point)
+  } 
 
   draw(ctx: CanvasRenderingContext2D): void {
     const width = this.image.width 
@@ -66,8 +71,12 @@ class ClassifiedTrash  extends AbstractEventDrivenElements {
   }
 
 
-  performCorrect():void {
-    console.log("correct")
+  showTips(){
+    this.showModel(90,90,this.imageWrong)
+    
+    this.setLocation(this.originalLocation)
+    console.log(this)
+    
   }
 
   clearY(): void {

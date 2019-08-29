@@ -3,13 +3,15 @@ import AbstractTrashBin from './abstracts/abstract-trash-bin'
 import ClassifiedTrash from './classified-trash'
 
 
-class ClassifiedTrashBin extends AbstractTrashBin {
+abstract class ClassifiedTrashBin extends AbstractTrashBin {
 
   id: number
   private images:HTMLImageElement[]
   private currentImage: HTMLImageElement
   private throwing: boolean 
   private falling: boolean
+
+  private offsetY:number 
 
   constructor(id:number, imagesSrc:string[], location: Point, outline: Point) {
     super(location,outline)
@@ -23,6 +25,7 @@ class ClassifiedTrashBin extends AbstractTrashBin {
     this.currentImage = this.images[0]
     this.throwing = false 
     this.falling = false
+    this.offsetY = 0
   }
   
   onTouchStart(e: TouchEvent): void {
@@ -34,13 +37,10 @@ class ClassifiedTrashBin extends AbstractTrashBin {
   onTouchEnd(e: TouchEvent): void {
   }
 
-  collision(piece: ClassifiedTrash): void {
-  }
+  abstract collision(piece: ClassifiedTrash): void;
 
 
   draw(ctx: CanvasRenderingContext2D):void{
-    
-    
     ctx.drawImage(this.currentImage,this.location.x, this.location.y,
       this.outline.x, this.outline.y)
   }
@@ -51,10 +51,11 @@ class ClassifiedTrashBin extends AbstractTrashBin {
     this.throwing = true 
 
     //let i = this.images.length
-    let i = 5
+    let i = 10
     const perform =()=>setTimeout(()=>{
-      this.move(new Point(0, -10))
+      this.move(new Point(0, -5))
       //this.currentImage = this.images[this.images.length - 1 - i]
+      this.offsetY -= 5
       i -= 1
       if(i >= 0) perform()
       else this.currentImage = this.images[this.images.length -1 ]
@@ -70,9 +71,10 @@ class ClassifiedTrashBin extends AbstractTrashBin {
     const callback = ()=>{ this.throwing = false; this.falling = false; this.currentImage = this.images[0]}
     this.falling = true
     //let i = this.images.length - 1
-    let i = 5
+    let i = 10
     const perform = (callback:()=>void) => setTimeout(()=> {
-      this.move(new Point(0, 10))
+      this.move(new Point(0, 5))
+      this.offsetY += 5
       //this.currentImage = this.images[i]
       i -= 1
       if(i >= 0) perform(callback)
@@ -86,7 +88,7 @@ class ClassifiedTrashBin extends AbstractTrashBin {
     const y = piece.location.y + piece.outline.y 
 
     if(x >= this.location.x && x <= this.location.x + this.outline.x){
-      if(y >= this.location.y && y <= this.location.y + this.outline.y)
+      if(y >= this.location.y && y <= this.location.y + this.outline.y- this.offsetY)
       {
         return true 
       }

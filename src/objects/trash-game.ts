@@ -44,7 +44,13 @@ class TrashGame extends AbstractGame {
   }
 
   onTouchEnd(e: TouchEvent): void {
-    
+    for(let i = 0; i < this.trashes.length; i++ ) {
+      for(let j = 0; j < this.bins.length; j++) {
+        if(this.bins[j].objectIn(this.trashes[i])) {
+          this.bins[j].collision(this.trashes[i])
+        }
+      }
+    }
   }
 
 }

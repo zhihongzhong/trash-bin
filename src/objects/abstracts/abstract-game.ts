@@ -30,11 +30,21 @@ abstract class AbstractGame {
     this.canvas = canvas 
     this.ctx = canvas.getContext("2d")
 
+    
+    
     const winWidth = document.documentElement.clientWidth || document.body.clientWidth
     const winHeight = document.documentElement.clientHeight || document.body.clientHeight
     
     this.canvas.width = winWidth
     this.canvas.height = winHeight 
+    this.canvas.style.width = winWidth + "px"
+    this.canvas.style.height = winHeight + "px"
+
+    canvas.style.width = winWidth + "px";
+    canvas.style.height = winHeight + "px";
+    canvas.height = winHeight * window.devicePixelRatio;
+    canvas.width = winWidth * window.devicePixelRatio;
+    this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
 
     this.wp = winWidth /100
     this.hp = winHeight / 100 
@@ -70,9 +80,14 @@ abstract class AbstractGame {
 
     element.setOutline(outline)
     element.setLocation(location)
+    element.setWidghRatio(this.wp)
+    element.setHeightRatio(this.hp)
 
     element.injectPopup(this.showPopup.bind(this))
+    element.beforeAddToContainer()
     this.elements.push(element)
+    element.afterAddToContainer()
+
   }
 
   addBackground(background: AbstractBackground): void {
@@ -92,7 +107,7 @@ abstract class AbstractGame {
   render():void {
    const ctx: CanvasRenderingContext2D = this.ctx
 
-   
+   ctx.fillRect(0,0, this.width , this.height )
    // render background first 
    this.backgrounds.forEach((b)=> b.draw(ctx))
 
@@ -200,7 +215,6 @@ abstract class AbstractGame {
   
   this.popup.onTouchEnd(e)
   const _internalHandleCanvasTouchEnd = () =>{
-      
       if(this.elements[i].getIsTouching()) {
         this.elements[i].onTouchEnd(ne)
         this.elements[i].setTouching(false)

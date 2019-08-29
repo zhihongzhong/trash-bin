@@ -35,38 +35,52 @@ import img_p2 from '../../assets/p2.png'
 import img_p3 from '../../assets/p3.png'
 import img_p4 from '../../assets/p4.png'
 
-import Background from '../../objects/background';
-import MusicWidget from '../../objects/music-widget';
-import Point from '../../objects/point';
-import HarmfulTrashBin from '../../objects/harmful-trash-bin';
-import TipWidget from '../../objects/tip-widget';
+import img_wrong from '../../assets/wrongbg.jpg'
+
+import img_coin from '../../assets/coin.png'
+
+import Background from '../../objects/background'
+import MusicWidget from '../../objects/music-widget'
+import Point from '../../objects/point'
+import HarmfulTrashBin from '../../objects/harmful-trash-bin'
+import TipWidget from '../../objects/tip-widget'
+import MarkWidget from '../../objects/mark-widget';
+import TrashPiece from '../../objects/trash-piece';
 
 class RealGame extends Component {
   constructor(props) {
     super(props)
 
     this.canvas = React.createRef() 
-    // this.pop = React.createRef() 
-
-    // this.ctx = null 
-    
-    // this.trash = null 
-    
-    // this.trashBins = []
-
-    // this.width = 0 
-    // this.height = 0
-
-    // this.startTouchX = 0
-    // this.startTouchY = 0
-    // this.popup = null
-    // this.initialize = this.initialize.bind(this)
-
     this.game = null
   }
 
   // init some basic scene
   componentDidMount() {
+    this.initialize(10)
+  }
+
+  init(id, imgstr, tips, CurrentMark) {
+
+  }
+
+  nextRound() {
+
+  }
+
+  destory() {
+
+  }
+
+  initialStageOne() {
+    this.game = new TrashGame(this.canvas) 
+    const piece = new TrashPiece({x: Math.random()*100, y: Math.random() * 100},{x:2,y:2}, {x:0,y:0},{x:0, y: 0})
+    piece.applyForce({x: 0, y:100})
+    this.game.addElement(piece)
+    this.game.render()
+  }
+
+  initialize(mark) {
     this.game = new TrashGame(this.canvas)
     
     const t1 = new HarmfulTrashBin(10,[img_t1,img_t1_1],
@@ -89,18 +103,21 @@ class RealGame extends Component {
     const musicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff)
     const tipWidget = new TipWidget(new Point(85,12),new Point(15,5),img_prompt,img_prompt2)
     const storyWidget = new TipWidget(new Point(85,20), new Point(15,5),img_gongyi,img_story)
+    const markWidget = new MarkWidget(new Point(4,4),new Point(22,5),img_coin, mark)
 
     const bg1 = new Background({x:0, y: 0},{x:100,y: 100},img_bg)
     const bg2 = new Background({x:0, y: 70},{x:100,y: 30},img_bot)
-    const trash = new ClassifiedTrash(10, new Point(40,30),new Point(35, 20),img_C2)
+    const trash = new ClassifiedTrash(10, new Point(40,30),new Point(35, 20),img_C2, img_wrong)
     this.game.addBackground(bg1)
     this.game.addBackground(bg2)
 
     this.game.addElement(musicWidget)
     this.game.addElement(tipWidget)
     this.game.addElement(storyWidget)
+    this.game.addElement(markWidget)
 
     this.game.addTrash(trash)
+
     this.game.addTrashBin(t1)
     this.game.addTrashBin(t2)
     this.game.addTrashBin(t3)
@@ -108,105 +125,12 @@ class RealGame extends Component {
 
     
     this.game.render()
-
   }
-
-  
-  // arguments like:
-  // question, possible answers etc..
-  //may be received 
-  // to initialize the game 
-  // but for now, is just for test 
-  // call this function in 'componentDidMount' method 
-  initialize() {
-   
-
-   
-    // this.trashBins = []
-    // this.trash = null 
-
-    // // initialize trash bins in loops
-
-    // for(let i = 1; i <= 4; i++ ){
-    //   let trashBin = new ClassifiedTrashBin(i,[],{x: i * (70),y:this.height - 150},{x: 50, y: 120})
-    //   this.trashBins.push(trashBin)
-    // }
-
-    
-    // this.trash = new ClassifiedTrash(2, {x: this.width / 2 - 40, y: 200},
-    //   {x: 80, y: 80},img_banana,this.popup
-    // )
-
-    // // enter the logic for game
-    // requestAnimationFrame(this.renderAnimation.bind(this))
-  }
-
-
-  
-
-  // handleCanvasTouchMove(e) {
-  //   let moveTouchX = e.changedTouches[0].clientX
-  //   let moveTouchY = e.changedTouches[0].clientY 
-  //   let trashbinId = 0 
-    
-  //   this.trash.move({x: moveTouchX - this.startTouchX, y: moveTouchY - this.startTouchY})
-    
-  //   for(let i = 0; i < this.trashBins.length; i++ ) {
-  //     if(this.trashBins[i].objectIn(this.trash)){
-  //       trashbinId = this.trashBins[i].id
-  //     }
-  //   }
-
-  //   for( let i = 0; i < this.trashBins.length; i++) {
-  //     if(this.trashBins[i].id === trashbinId) {
-  //       this.trashBins[i].throwTrash()
-  //     }else {
-  //       this.trashBins[i].backToNormal()
-  //     }
-  //   }
-  //   this.startTouchX = moveTouchX
-  //   this.startTouchY = moveTouchY
-  // }
-
-  // handleCanvasTouchEnd(e) {
-
-  //   for(let i = 0; i < this.trashBins.length; i++ ) {
-  //     if(this.trashBins[i].objectIn(this.trash)){
-  //       this.trashBins[i].collision(this.trash)
-  //     }
-  //   }
-
-  //   this.trash.unselect()
-  // }
-
-  // handleCanvasToucheStart(e) {
-    
-  //   this.startTouchX = e.changedTouches[0].clientX 
-  //   this.startTouchY = e.changedTouches[0].clientY 
-
-  //   if(this.trash.in({x: this.startTouchX, y: this.startTouchY}))
-  //     this.trash.select()
-  // }
-
-  // // the main render function
-  // renderAnimation() {
-  //   this.ctx.fillStyle = "#fff"
-  //   this.ctx.fillRect(0, 0, this.width, this.height)
-    
-
-  //   for(let i = 0; i < this.trashBins.length; i++ ) {
-  //     this.trashBins[i].draw(this.ctx)
-  //   }
-
-  //   this.trash.draw(this.ctx)
-
-  //   requestAnimationFrame(this.renderAnimation.bind(this))
-  // }
 
   render() {
 
     return (
-      <div className="real-game-root" style={{width: "100vw",height: "100vh", overflow: "hidden"}}>
+      <div className="real-game-root" style={{width: "100vw",height: "100vh", overflow: "hidden",position:"fixed"}}>
         <div className="canvas-wrapper">
           <canvas ref={(ref)=> this.canvas = ref}>
             您的浏览器不支持canvas

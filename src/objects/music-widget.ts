@@ -20,10 +20,12 @@ class MusicWidget extends AbstractWidget {
   draw(ctx: CanvasRenderingContext2D):void {
     super.draw(ctx)
     //ctx.drawImage(this.image,this.location.x, this.location.y, this.outline.x, this.outline.y)
+    const size = this.heightRatio * 2.5
+
     ctx.save()
-    ctx.translate(this.location.x + 20, this.location.y + 20)
-    ctx.rotate(this.degree *Math.PI/180)
-    ctx.drawImage(this.img2, -10 , -10, this.outline.y - 20, this.outline.y -20)
+    ctx.translate(this.location.x + size , this.location.y + size )
+    ctx.rotate(this.degree *Math.PI / 180)
+    ctx.drawImage(this.img2, 0 - size / 2, 0 - size/ 2 , size , size )
     ctx.restore()
     
     if(this.degree >=360) this.degree = 0
