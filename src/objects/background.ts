@@ -6,6 +6,22 @@ class Background implements AbstractBackground {
   outline:Point;
   image:HTMLImageElement
 
+  getOutline(): Point {
+    return this.outline
+  }
+
+  setOutline(outline: Point): void {
+    this.outline = new Point(outline.x, outline.y)
+  }
+
+  getLocation(): Point {
+    return this.location
+  }
+  
+  setLocation(location: Point): void {
+    this.location = new Point(location.x, location.y)
+  }
+  
   constructor(location:Point, outline: Point, imageStr:string) {
     this.location = new Point(location.x, location.y)
     this.outline = new Point(outline.x, outline.y)

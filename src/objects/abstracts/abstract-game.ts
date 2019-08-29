@@ -1,8 +1,9 @@
 import GameElement from '../interfaces/game-element'
 import EventDrivenElement from '../interfaces/event-driven-element'
 import Point from '../point';
-import AbstractEventDrivenElements from './abstract-event-driven-element';
 import AbstractBackground from '../interfaces/abstract-background';
+import StandPopup from '../stand-popup';
+import ShowPopup from '../interfaces/show-popup';
 
 // this is a abstract game scene object for 
 // rendering static object 
@@ -18,14 +19,12 @@ abstract class AbstractGame {
   public readonly wp: number // internal scale
   public readonly hp: number // internal scale
 
-  private touchStartTimer:number
-  private touchMoveTimer:number
-  private touchEndTimer:number
 
   private interruptStartTimer:boolean
   private interruptMoveTimer:boolean
   private interruptEndTimer:boolean
-
+  
+  private popup:StandPopup
   // get wp and wh based on device scale
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas 
@@ -43,9 +42,7 @@ abstract class AbstractGame {
     this.elements = []
     this.backgrounds = []
 
-    this.touchStartTimer = 0
-    this.touchMoveTimer = 0
-    this.touchEndTimer = 0
+    this.popup = new StandPopup(new Point(0,0), new Point(this.IW(100),this.IH(100)))
 
     if(this.ctx === null || this.canvas === null) {
       throw new Error("failed to create canvas, check the canvas argument")
@@ -56,11 +53,38 @@ abstract class AbstractGame {
     this.canvas.addEventListener("touchend", this.handleCanvsToucheEnd.bind(this))
   }
 
+  showPopup(popInfo: ShowPopup) {
+
+  }
+  // inject popup here 
+  // correct the scale here 
   addElement(element: EventDrivenElement):void {
+    let outline:Point = element.getOutline()
+    let location:Point = element.getLocation()
+
+    outline.x = this.IW(outline.x)
+    outline.y = this.IH(outline.y)
+    location.x = this.IW(location.x)
+    location.y = this.IH(location.y)
+
+    element.setOutline(outline)
+    element.setLocation(location)
+
+    element.injectPopup(this.showPopup.bind(this))
     this.elements.push(element)
   }
 
   addBackground(background: AbstractBackground): void {
+    let outline:Point = background.getOutline()
+    let location:Point = background.getLocation()
+
+    outline.x = this.IW(outline.x)
+    outline.y = this.IH(outline.y)
+    location.x = this.IW(location.x)
+    location.y = this.IH(location.y)
+
+    background.setOutline(outline)
+    background.setLocation(location)
     this.backgrounds.push(background)
   }
 
@@ -111,8 +135,6 @@ abstract class AbstractGame {
     let i = 0
     this.interruptEndTimer = false 
     
-    console.log(this.elements)
-    console.log(this.elements.length)
     const _internalHandleCanvasTouchStart = () => {
       if(this.elements[i].inspectTouch(new Point(x, y ))) {
         this.elements[i].onTouchStart(ne)
@@ -120,7 +142,6 @@ abstract class AbstractGame {
       }
       i += 1
       if(!this.interruptStartTimer && i < this.elements.length-1) {
-        console.log("set time out")
         setTimeout(_internalHandleCanvasTouchStart,10)
       }
         
@@ -147,9 +168,8 @@ abstract class AbstractGame {
         this.elements[i].onTouchMove(ne)
       }
       i+=1 
-
       if(!this.interruptMoveTimer && i < this.elements.length-1)
-        setTimeout(_internalHandleCanvasTouchMove,1)
+        setTimeout(_internalHandleCanvasTouchMove,10)
     }
     
     _internalHandleCanvasTouchMove()
@@ -161,9 +181,9 @@ abstract class AbstractGame {
   this.onTouchEnd(e)
 
   let ne:TouchEvent = e 
-    ne.stopPropagation = ()=> {
-      this.interruptEndTimer = true
-    }
+  ne.stopPropagation = ()=> {
+    this.interruptEndTimer = true
+  }
 
   let i = 0
   this.interruptEndTimer = false 
@@ -176,7 +196,7 @@ abstract class AbstractGame {
       }
       i +=1
       if(!this.interruptEndTimer && i < this.elements.length-1) {
-        setTimeout(_internalHandleCanvasTouchEnd, 1);
+        setTimeout(_internalHandleCanvasTouchEnd, 10);
       }
     }
 

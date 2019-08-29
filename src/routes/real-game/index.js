@@ -56,26 +56,26 @@ class RealGame extends Component {
     this.game = new TrashGame(this.canvas)
     
     const t1 = new ClassifiedTrashBin(10,[img_t1,img_t1_1],
-      {x: this.game.IW(2), y: this.game.IH(78)},{x: this.game.IW(20), y: this.game.IH(20)
+      {x: 2, y: 78},{x: 20, y: 20
     })
 
     const t2 = new ClassifiedTrashBin(20,[img_t2, img_t2_1],
-      {x: this.game.IW(28),y: this.game.IH(78)},{x: this.game.IW(20),y: this.game.IH(20)
+      {x: 28,y: 78},{x: 20,y: 20
     })
 
     const t3 = new ClassifiedTrashBin(30,[img_t3, img_t3_1],
-      {x: this.game.IW(53),y: this.game.IH(78)},{x: this.game.IW(20),y: this.game.IH(20)
+      {x: 53,y: 78},{x: 20,y: 20
     })
 
     const t4 = new ClassifiedTrashBin(40,[img_t4, img_t4_1],
-      {x: this.game.IW(77),y: this.game.IH(78)},{x: this.game.IW(20),y: this.game.IH(20)
+      {x: 77,y: 78},{x: 20,y: 20
     })
 
     
-    const musicWidget = new MusicWidget(new Point(this.game.IW(85),this.game.IH(5)),new Point(this.game.IW(15),this.game.IH(5)),img_sndon,img_sndoff)
-    const bg1 = new Background({x:0, y: 0},{x:this.game.IW(100),y: this.game.IH(100)},img_bg)
-    const bg2 = new Background({x:0, y: this.game.IH(70)},{x:this.game.IW(100),y: this.game.IH(30)},img_bot)
-    const trash = new ClassifiedTrash(10, new Point(this.game.IW(40),this.game.IH(30)),new Point(this.game.IW(35), this.game.IH(20)),img_C2)
+    const musicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff)
+    const bg1 = new Background({x:0, y: 0},{x:100,y: 100},img_bg)
+    const bg2 = new Background({x:0, y: 70},{x:100,y: 30},img_bot)
+    const trash = new ClassifiedTrash(10, new Point(40,30),new Point(35, 20),img_C2)
     this.game.addBackground(bg1)
     this.game.addBackground(bg2)
 

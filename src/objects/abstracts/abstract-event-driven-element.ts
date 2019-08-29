@@ -1,11 +1,14 @@
 import EventDrivenElement from "../interfaces/event-driven-element";
 import Point from '../point'
+import ShowPopup from "../interfaces/show-popup";
 
 abstract class AbstractEventDrivenElements implements EventDrivenElement {
-
+  
+  
   location:Point;
   outline:Point;
   private isTouching:boolean;
+  showModel:ShowPopup;
 
   constructor(location: Point, outline:Point) {
     this.location = new Point(location.x, location.y)
@@ -18,9 +21,30 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
   abstract draw(ctx: CanvasRenderingContext2D):void;
   abstract move(point: Point): void;
 
+  getOutline(): Point {
+    return this.outline
+  }
+
+  setOutline(outline: Point): void {
+    this.outline = new Point(outline.x, outline.y)
+  }
+
+  getLocation(): Point {
+    return this.location
+  }
+  
+  setLocation(location: Point): void {
+    this.location = new Point(location.x, location.y)
+  }
+
+  injectPopup(popup: ShowPopup): void {
+    this.showModel = popup
+  }
+
   inspectTouch(point: Point): boolean {
     return this.in(point)
   }
+
 
   drawImage(ctx:CanvasRenderingContext2D, image:HTMLImageElement) {
     ctx.drawImage(image, this.location.x, this.location.y,this.outline.x, this.outline.y)
