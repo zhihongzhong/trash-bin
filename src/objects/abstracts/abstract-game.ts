@@ -18,6 +18,14 @@ abstract class AbstractGame {
   public readonly wp: number // internal scale
   public readonly hp: number // internal scale
 
+  private touchStartTimer:number
+  private touchMoveTimer:number
+  private touchEndTimer:number
+
+  private interruptStartTimer:boolean
+  private interruptMoveTimer:boolean
+  private interruptEndTimer:boolean
+
   // get wp and wh based on device scale
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas 
@@ -34,6 +42,10 @@ abstract class AbstractGame {
 
     this.elements = []
     this.backgrounds = []
+
+    this.touchStartTimer = 0
+    this.touchMoveTimer = 0
+    this.touchEndTimer = 0
 
     if(this.ctx === null || this.canvas === null) {
       throw new Error("failed to create canvas, check the canvas argument")
@@ -91,34 +103,85 @@ abstract class AbstractGame {
     const x = e.changedTouches[0].clientX
     const y = e.changedTouches[0].clientY
    
-    this.elements.forEach(
-      ele => {
-        if(ele.inspectTouch(new Point(x, y))) {
-          ele.onTouchStart(e)
-          ele.setTouching(true)
-        }
+    let ne:TouchEvent = e 
+    ne.stopPropagation = ()=> {
+      this.interruptStartTimer = true
+    }
+
+    let i = 0
+    this.interruptEndTimer = false 
+    
+    console.log(this.elements)
+    console.log(this.elements.length)
+    const _internalHandleCanvasTouchStart = () => {
+      if(this.elements[i].inspectTouch(new Point(x, y ))) {
+        this.elements[i].onTouchStart(ne)
+        this.elements[i].setTouching(true)
       }
-    )
+      i += 1
+      if(!this.interruptStartTimer && i < this.elements.length-1) {
+        console.log("set time out")
+        setTimeout(_internalHandleCanvasTouchStart,10)
+      }
+        
+    }
+
+    _internalHandleCanvasTouchStart()
   }
 
   handleCanvasTouchMove(e: TouchEvent):void {
     
     this.onTouchMove(e)
-    this.elements.forEach( ele => {
-      if(ele.getIsTouching()) {
-        ele.onTouchMove(e)
+
+    let ne:TouchEvent = e 
+    ne.stopPropagation = ()=> {
+      this.interruptMoveTimer = true
+    }
+
+    let i = 0 
+    this.interruptMoveTimer = false 
+    
+    const _internalHandleCanvasTouchMove = () =>{
+  
+      if(this.elements[i].getIsTouching()) {
+        this.elements[i].onTouchMove(ne)
       }
-    })
+      i+=1 
+
+      if(!this.interruptMoveTimer && i < this.elements.length-1)
+        setTimeout(_internalHandleCanvasTouchMove,1)
+    }
+    
+    _internalHandleCanvasTouchMove()
   }
 
  handleCanvsToucheEnd(e: TouchEvent):void {
-   this.onTouchEnd(e)
-  this.elements.forEach( ele => {
-    if(ele.getIsTouching()) {
-      ele.onTouchEnd(e)
-      ele.setTouching(false)
+
+
+  this.onTouchEnd(e)
+
+  let ne:TouchEvent = e 
+    ne.stopPropagation = ()=> {
+      this.interruptEndTimer = true
     }
-  })
+
+  let i = 0
+  this.interruptEndTimer = false 
+
+  const _internalHandleCanvasTouchEnd = () =>{
+      
+      if(this.elements[i].getIsTouching()) {
+        this.elements[i].onTouchEnd(ne)
+        this.elements[i].setTouching(false)
+      }
+      i +=1
+      if(!this.interruptEndTimer && i < this.elements.length-1) {
+        setTimeout(_internalHandleCanvasTouchEnd, 1);
+      }
+    }
+
+  _internalHandleCanvasTouchEnd()
+
  }
 
 }

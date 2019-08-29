@@ -43,6 +43,7 @@ class StandPopup extends AbstractEventDrivenElements implements AbstractPopup {
 
   draw(ctx: CanvasRenderingContext2D): void {
     if(!this.showing) return 
+    ctx.fillStyle= "RGBA(0,0,0,0.5)"
     ctx.fillRect(this.location.x, this.location.y, this.outline.x, this.outline.y)
     
     let leftOffset:number, topOffset:number = 0 
