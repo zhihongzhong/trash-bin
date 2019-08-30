@@ -1,4 +1,4 @@
-import Point from '../point'
+import Point from '../functionalities/point'
 
 export default interface AbstractTrash {
   move(point: Point):void;

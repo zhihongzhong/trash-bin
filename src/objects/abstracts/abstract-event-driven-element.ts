@@ -1,11 +1,17 @@
 import EventDrivenElement from "../interfaces/event-driven-element";
-import Point from '../point'
-
+import Point from '../functionalities/point'
+import ShowPopup from "../interfaces/show-popup"
+import ShowPrompt from "../interfaces/show-prompt"
 abstract class AbstractEventDrivenElements implements EventDrivenElement {
-
-  location:Point;
-  outline:Point;
-  private isTouching:boolean;
+ 
+  location:Point
+  outline:Point
+  private isTouching:boolean
+  showModel:ShowPopup
+  showPrompt:ShowPrompt
+  protected widthRatio:number 
+  protected heightRatio:number 
+  private elementID:number 
 
   constructor(location: Point, outline:Point) {
     this.location = new Point(location.x, location.y)
@@ -17,6 +23,59 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
   abstract onTouchEnd(e: TouchEvent): void;
   abstract draw(ctx: CanvasRenderingContext2D):void;
   abstract move(point: Point): void;
+
+  getID():number{
+    return this.elementID
+  }
+
+  setID(id:number):void {
+    this.elementID = id
+  }
+
+  getWidthRatio(): number {
+    return this.widthRatio
+  }
+  getHeightRatio(): number {
+    return this.heightRatio
+  }
+  setWidghRatio(ratio: number): void {
+    this.widthRatio = ratio
+  }
+  setHeightRatio(ratio: number): void {
+    this.heightRatio = ratio
+  }
+  
+  beforeAddToContainer():void{
+
+  }
+  
+  afterAddToContainer():void{
+
+  }
+
+  getOutline(): Point {
+    return this.outline
+  }
+
+  setOutline(outline: Point): void {
+    this.outline = new Point(outline.x, outline.y)
+  }
+
+  getLocation(): Point {
+    return this.location
+  }
+  
+  setLocation(location: Point): void {
+    this.location = new Point(location.x, location.y)
+  }
+
+  injectPopup(popup: ShowPopup): void {
+    this.showModel = popup
+  }
+
+  injectPrompt(prompt: ShowPrompt):void {
+    this.showPrompt = prompt
+  }
 
   inspectTouch(point: Point): boolean {
     return this.in(point)
@@ -41,7 +100,6 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
     if(x >= this.location.x && x <= this.location.x + this.outline.x){
       if(y >= this.location.y && y <= this.location.y + this.outline.y)
       {
-        
         return true 
       }
     }
