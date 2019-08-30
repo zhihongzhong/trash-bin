@@ -1,9 +1,9 @@
 
 
 
-import Point from './point'
-import AbstractEventDrivenElements from './abstracts/abstract-event-driven-element';
-import GameElement from './interfaces/game-element';
+import Point from '../functionalities/point'
+import AbstractEventDrivenElements from '../abstracts/abstract-event-driven-element';
+import GameElement from '../interfaces/game-element';
 
 class TrashPiece extends AbstractEventDrivenElements {
   onTouchStart(e: TouchEvent): void {

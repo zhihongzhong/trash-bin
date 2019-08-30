@@ -1,5 +1,5 @@
-import AbstractWidget from './abstracts/abstract-widget'
-import Point from './point';
+import AbstractWidget from '../abstracts/abstract-widget'
+import Point from '../functionalities/point';
 
 class MusicWidget extends AbstractWidget {
   img2:HTMLImageElement 

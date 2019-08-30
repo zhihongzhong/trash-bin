@@ -1,5 +1,5 @@
-import AbstractBackground from "./interfaces/abstract-background";
-import Point from './point'
+import AbstractBackground from "../interfaces/abstract-background";
+import Point from '../functionalities/point'
 
 class Background implements AbstractBackground {
   location:Point;

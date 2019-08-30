@@ -1,10 +1,10 @@
 import GameElement from '../interfaces/game-element'
 import EventDrivenElement from '../interfaces/event-driven-element'
-import Point from '../point';
+import Point from '../functionalities/point';
 import AbstractBackground from '../interfaces/abstract-background';
-import StandPopup from '../stand-popup';
+import StandPopup from '../functionalities/stand-popup';
 import ShowPopup from '../interfaces/show-popup';
-import RichTextPrompt from '../rich-text-prompt';
+import RichTextPrompt from '../functionalities/rich-text-prompt';
 import ShowPrompt from '../interfaces/show-prompt';
 
 // this is a abstract game scene object for 
@@ -78,10 +78,12 @@ abstract class AbstractGame {
     this.popup.show(img,new Point(this.IW(width),this.IH(height)))
   }
 
+  // @deprecated, do not use it
   showPrompt(title:string, content:string):void {
     this.prompt.show(title, content,this.IW(90),this.IH(50))
   }
 
+  // @implements ShowPrompt interface
   showRichTextPrompt(title:string, content:string,imgStr:HTMLImageElement):void {
     this.prompt.showRichText(title,content,this.IW(90),this.IH(50),imgStr)
   }
@@ -128,6 +130,15 @@ abstract class AbstractGame {
   // receive a EvenetDrivenElement then destroy it 
   destroyElement(e:EventDrivenElement) {
     this.elements = this.elements.filter(element => element.getID() !== e.getID())
+  }
+
+  // sort elements by their id
+  trim():void {
+    this.elements = this.elements.sort((a:EventDrivenElement, b:EventDrivenElement):number => {
+      if(a.getID()> b.getID()) return 1
+      else if(a.getID() < b.getID()) return -1
+      return 0
+    })
   }
 
   render():void {

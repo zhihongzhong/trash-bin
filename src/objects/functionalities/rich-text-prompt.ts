@@ -1,9 +1,9 @@
-import AbstractEventDrivenElements from "./abstracts/abstract-event-driven-element";
-import AbstractPopup from "./interfaces/popup";
+import AbstractEventDrivenElements from "../abstracts/abstract-event-driven-element";
+import AbstractPopup from "../interfaces/popup";
 import Point from './point'
 
-import * as img_prompt from '../assets/wrongbg.jpg'
-import AbstractPrompt from "./interfaces/abstract-prompt"
+import * as img_prompt from '../../assets/wrongbg.jpg'
+import AbstractPrompt from "../interfaces/abstract-prompt"
 // system-level component 
 // only be calld by 'game' object 
 // any component that extends AbstractEventDrivenElement 
@@ -85,7 +85,7 @@ class RichTextPrompt extends AbstractEventDrivenElements implements AbstractProm
     ctx.fillText(this.content, this.outline.x /2, topOffset + this.heightRatio * 30)
 
     const imageRatio = this.wrongImage.width / this.wrongImage.height
-    ctx.drawImage(this.wrongImage, this.outline.x / 2 - this.widthRatio * 15, this.outline.y / 2 - this.heightRatio * 20,
+    ctx.drawImage(this.wrongImage, this.outline.x / 2 - this.widthRatio * 15, this.outline.y / 2 - this.heightRatio * 15,
       this.widthRatio * 30, this.widthRatio / imageRatio * 30)
   }
   

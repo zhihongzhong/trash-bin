@@ -1,5 +1,5 @@
 import AbstractEventDrivenElements from "./abstract-event-driven-element";
-import Point from '../point'
+import Point from '../functionalities/point'
 
 abstract class AbstractWidget extends AbstractEventDrivenElements {
 

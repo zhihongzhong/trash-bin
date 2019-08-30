@@ -1,5 +1,5 @@
 import GameElement from './game-element'
-import Point from '../point'
+import Point from '../functionalities/point'
 import ShowPopup from './show-popup'
 import ShowPrompt from './show-prompt'
 

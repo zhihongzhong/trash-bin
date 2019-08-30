@@ -1,6 +1,8 @@
-import Point from './point'
-import AbstractTrashBin from './abstracts/abstract-trash-bin'
+import Point from '../functionalities/point'
+import AbstractTrashBin from '../abstracts/abstract-trash-bin'
 import ClassifiedTrash from './classified-trash'
+import MarkWidget from '../widgets/mark-widget';
+import RoundWidget from '../widgets/round-widget';
 
 
 abstract class ClassifiedTrashBin extends AbstractTrashBin {
@@ -37,7 +39,7 @@ abstract class ClassifiedTrashBin extends AbstractTrashBin {
   onTouchEnd(e: TouchEvent): void {
   }
 
-  abstract collision(piece: ClassifiedTrash): void;
+  abstract collision(piece: ClassifiedTrash,mark:MarkWidget, round:RoundWidget): void;
 
 
   draw(ctx: CanvasRenderingContext2D):void{

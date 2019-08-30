@@ -1,29 +1,31 @@
-import AbstractTrash from './interfaces/abstract-trash'
-import Point from './point';
+import AbstractTrash from '../interfaces/abstract-trash'
+import Point from '../functionalities/point';
 
-import AbstractEventDrivenElements from './abstracts/abstract-event-driven-element';
+import AbstractEventDrivenElements from '../abstracts/abstract-event-driven-element';
 
 class ClassifiedTrash  extends AbstractEventDrivenElements {
 
   image: HTMLImageElement
-  imageWrong: HTMLImageElement
 
   id: number
+
+  private title:string
+  private content:string 
 
   private touchStartX:number 
   private touchStartY:number 
   private originalLocation:Point 
-  constructor(id:number, location: Point, outline:Point, imageStr: string,imgWrongSrc:string) {
+  constructor(id:number, location: Point, outline:Point, imageStr: string,title:string, content:string) {
     super(location, outline)
 
     this.id = id 
     this.image = new Image()
     this.image.src = imageStr 
     
-    this.imageWrong = new Image() 
-    this.imageWrong.src = imgWrongSrc
-
     this.originalLocation = new Point(0,0 )
+
+    this.content = content
+    this.title = title
 
     this.touchStartX = 0
     this.touchStartY = 0
@@ -71,10 +73,13 @@ class ClassifiedTrash  extends AbstractEventDrivenElements {
   }
 
 
+  normalLocation() {
+    this.setLocation(this.originalLocation)
+  }
   showTips(){
     //this.showModel(90,90,this.imageWrong)
-    this.showPrompt("这算哪门子垃圾","请勿丢进垃圾桶",this.image)
-    this.setLocation(this.originalLocation)
+    this.showPrompt(this.title,this.content,this.image)
+    this.normalLocation()
     console.log(this)
     
   }

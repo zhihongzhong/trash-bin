@@ -1,4 +1,4 @@
-import Point from '../point'
+import Point from '../functionalities/point'
 export default interface AbstractBackground  {
   draw(ctx: CanvasRenderingContext2D):void;
 

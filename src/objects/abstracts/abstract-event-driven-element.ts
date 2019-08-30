@@ -1,11 +1,9 @@
 import EventDrivenElement from "../interfaces/event-driven-element";
-import Point from '../point'
+import Point from '../functionalities/point'
 import ShowPopup from "../interfaces/show-popup"
 import ShowPrompt from "../interfaces/show-prompt"
 abstract class AbstractEventDrivenElements implements EventDrivenElement {
  
-  
-  
   location:Point
   outline:Point
   private isTouching:boolean
@@ -35,7 +33,7 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
   setID(id:number):void {
     this.elementID = id
   }
-  
+
   getWidthRatio(): number {
     return this.widthRatio
   }

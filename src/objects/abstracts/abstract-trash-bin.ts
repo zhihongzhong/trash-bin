@@ -1,8 +1,11 @@
 
-import Point from '../point'
+import Point from '../functionalities/point'
 import AbstractTrash from '../interfaces/abstract-trash'
 
 import AbstractEventDrivenElements from './abstract-event-driven-element';
+import ClassifiedTrash from '../elements/classified-trash';
+import MarkWidget from '../widgets/mark-widget';
+import RoundWidget from '../widgets/round-widget';
 
 abstract class AbstractTrashBin extends AbstractEventDrivenElements{
 
@@ -27,7 +30,7 @@ abstract class AbstractTrashBin extends AbstractEventDrivenElements{
     ctx.stroke()
   }
   // define when got collised's action 
-  collision(piece: AbstractTrash){
+  collision(piece: ClassifiedTrash,mark:MarkWidget, round:RoundWidget){
     piece.clearY()
   }
 

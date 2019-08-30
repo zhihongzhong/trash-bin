@@ -1,5 +1,5 @@
-import AbstractWidget from "./abstracts/abstract-widget";
-import Point from "./point";
+import AbstractWidget from "../abstracts/abstract-widget";
+import Point from "../functionalities/point";
 
 
 class MarkWidget extends AbstractWidget {
@@ -15,6 +15,10 @@ class MarkWidget extends AbstractWidget {
     this.mark += mark
   }
 
+  getMark():number{
+    return this.mark
+  }
+  
   onClick(e: TouchEvent): void {
    
   }
@@ -22,7 +26,7 @@ class MarkWidget extends AbstractWidget {
   draw(ctx:CanvasRenderingContext2D) {
     super.draw(ctx)
     ctx.font =  '20px "微软雅黑"'
-    ctx.fillText(this.mark.toString(),this.location.x + this.widthRatio * 7, this.location.y + this.outline.y / 2 + 7)
+    ctx.fillText(this.mark.toString(),this.location.x + this.widthRatio * 11, this.location.y + this.outline.y / 2 + 7)
   }
 }
 

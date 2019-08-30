@@ -1,5 +1,5 @@
-import AbstractEventDrivenElements from "./abstracts/abstract-event-driven-element";
-import AbstractPopup from "./interfaces/popup";
+import AbstractEventDrivenElements from "../abstracts/abstract-event-driven-element";
+import AbstractPopup from "../interfaces/popup";
 import Point from './point'
 
 

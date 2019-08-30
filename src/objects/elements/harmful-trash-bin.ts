@@ -1,6 +1,8 @@
 import ClassifiedTrashBin from './classified-trash-bin'
 import ClassifiedTrash from './classified-trash'
-import Point from './point';
+import Point from '../functionalities/point';
+import MarkWidget from '../widgets/mark-widget';
+import RoundWidget from '../widgets/round-widget';
 
 
 class HarmfulTrashBin extends ClassifiedTrashBin {
@@ -18,13 +20,18 @@ class HarmfulTrashBin extends ClassifiedTrashBin {
     this.showModel(90,90,this.clickImage)
   }
 
-  collision(piece: ClassifiedTrash): void {
+  collision(piece: ClassifiedTrash,mark:MarkWidget, round:RoundWidget): void {
     if(piece.id === this.id) {
       // do something correct
+      mark.add(100)
+      round.nextRound()
+      this.backToNormal()
+      piece.normalLocation()
     }
     else {
       piece.showTips()
       this.backToNormal()
+      round.nextRound()
     }
   }
 }

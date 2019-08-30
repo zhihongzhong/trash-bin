@@ -1,4 +1,4 @@
-import Point from '../point'
+import Point from '../functionalities/point'
 
 // any of 'the game' has to implement this interface 
 interface GameElement {

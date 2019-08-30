@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import TrashPiece from '../../objects/trash-piece';
+import TrashPiece from '../../objects/elements/trash-piece';
 import AbstractTrashBin from '../../objects/abstracts/abstract-trash-bin'
 
 import "./index.scss"
