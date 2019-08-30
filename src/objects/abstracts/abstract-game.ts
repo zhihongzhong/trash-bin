@@ -4,6 +4,8 @@ import Point from '../point';
 import AbstractBackground from '../interfaces/abstract-background';
 import StandPopup from '../stand-popup';
 import ShowPopup from '../interfaces/show-popup';
+import RichTextPrompt from '../rich-text-prompt';
+import ShowPrompt from '../interfaces/show-prompt';
 
 // this is a abstract game scene object for 
 // rendering static object 
@@ -25,13 +27,14 @@ abstract class AbstractGame {
   private interruptEndTimer:boolean
   
   private popup:StandPopup
+  private prompt:RichTextPrompt
+
+  private incrementID:number 
   // get wp and wh based on device scale
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas 
     this.ctx = canvas.getContext("2d")
 
-    
-    
     const winWidth = document.documentElement.clientWidth || document.body.clientWidth
     const winHeight = document.documentElement.clientHeight || document.body.clientHeight
     
@@ -46,13 +49,21 @@ abstract class AbstractGame {
     canvas.width = winWidth * window.devicePixelRatio;
     this.ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
 
-    this.wp = winWidth /100
-    this.hp = winHeight / 100 
+    this.incrementID = 0
+    
+    this.width = winWidth
+    this.height = winHeight
+    this.wp = this.width / 100
+    this.hp = this.height / 100 
 
     this.elements = []
     this.backgrounds = []
 
     this.popup = new StandPopup(new Point(0,0), new Point(this.IW(100),this.IH(100)))
+    this.prompt = new RichTextPrompt(new Point(0,0), new Point(this.IW(100),this.IH(100)))
+
+    this.prompt.setWidghRatio(this.wp)
+    this.prompt.setHeightRatio(this.hp)
 
     if(this.ctx === null || this.canvas === null) {
       throw new Error("failed to create canvas, check the canvas argument")
@@ -64,8 +75,15 @@ abstract class AbstractGame {
   }
 
   showPopup(width:number, height:number, img:HTMLImageElement):void {
-    
     this.popup.show(img,new Point(this.IW(width),this.IH(height)))
+  }
+
+  showPrompt(title:string, content:string):void {
+    this.prompt.show(title, content,this.IW(90),this.IH(50))
+  }
+
+  showRichTextPrompt(title:string, content:string,imgStr:HTMLImageElement):void {
+    this.prompt.showRichText(title,content,this.IW(90),this.IH(50),imgStr)
   }
   // inject popup here 
   // correct the scale here 
@@ -83,7 +101,10 @@ abstract class AbstractGame {
     element.setWidghRatio(this.wp)
     element.setHeightRatio(this.hp)
 
+    element.injectPrompt(this.showRichTextPrompt.bind(this))
     element.injectPopup(this.showPopup.bind(this))
+    element.setID(this.incrementID)
+    this.incrementID += 1
     element.beforeAddToContainer()
     this.elements.push(element)
     element.afterAddToContainer()
@@ -104,10 +125,14 @@ abstract class AbstractGame {
     this.backgrounds.push(background)
   }
 
+  // receive a EvenetDrivenElement then destroy it 
+  destroyElement(e:EventDrivenElement) {
+    this.elements = this.elements.filter(element => element.getID() !== e.getID())
+  }
+
   render():void {
    const ctx: CanvasRenderingContext2D = this.ctx
-
-   ctx.fillRect(0,0, this.width , this.height )
+   
    // render background first 
    this.backgrounds.forEach((b)=> b.draw(ctx))
 
@@ -116,6 +141,7 @@ abstract class AbstractGame {
    )
 
    this.popup.draw(ctx)
+   this.prompt.draw(ctx)
    requestAnimationFrame(this.render.bind(this))
   }
 
@@ -158,6 +184,9 @@ abstract class AbstractGame {
       this.popup.onTouchStart(e)
     }
 
+    if(this.prompt.inspectTouch(new Point(x,y))){
+      this.prompt.onTouchStart(e)
+    }
     const _internalHandleCanvasTouchStart = () => {
       if(this.elements[i].inspectTouch(new Point(x, y ))) {
         this.elements[i].onTouchStart(ne)

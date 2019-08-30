@@ -1,8 +1,41 @@
 import EventDrivenElement from "../interfaces/event-driven-element";
 import Point from '../point'
-import ShowPopup from "../interfaces/show-popup";
-
+import ShowPopup from "../interfaces/show-popup"
+import ShowPrompt from "../interfaces/show-prompt"
 abstract class AbstractEventDrivenElements implements EventDrivenElement {
+ 
+  
+  
+  location:Point
+  outline:Point
+  private isTouching:boolean
+  showModel:ShowPopup
+  showPrompt:ShowPrompt
+  protected widthRatio:number 
+  protected heightRatio:number 
+  private elementID:number 
+
+  constructor(location: Point, outline:Point) {
+    this.location = new Point(location.x, location.y)
+    this.outline = new Point( outline.x, outline.y)
+  }
+
+ 
+  
+  abstract onTouchStart(e: TouchEvent): void;
+  abstract onTouchMove(e: TouchEvent): void;
+  abstract onTouchEnd(e: TouchEvent): void;
+  abstract draw(ctx: CanvasRenderingContext2D):void;
+  abstract move(point: Point): void;
+
+  getID():number{
+    return this.elementID
+  }
+
+  setID(id:number):void {
+    this.elementID = id
+  }
+  
   getWidthRatio(): number {
     return this.widthRatio
   }
@@ -16,26 +49,6 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
     this.heightRatio = ratio
   }
   
-  
-  location:Point;
-  outline:Point;
-  private isTouching:boolean;
-  showModel:ShowPopup;
-
-  protected widthRatio:number 
-  protected heightRatio:number 
-  
-  constructor(location: Point, outline:Point) {
-    this.location = new Point(location.x, location.y)
-    this.outline = new Point( outline.x, outline.y)
-  }
-
-  abstract onTouchStart(e: TouchEvent): void;
-  abstract onTouchMove(e: TouchEvent): void;
-  abstract onTouchEnd(e: TouchEvent): void;
-  abstract draw(ctx: CanvasRenderingContext2D):void;
-  abstract move(point: Point): void;
-
   beforeAddToContainer():void{
 
   }
@@ -62,6 +75,10 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
 
   injectPopup(popup: ShowPopup): void {
     this.showModel = popup
+  }
+
+  injectPrompt(prompt: ShowPrompt):void {
+    this.showPrompt = prompt
   }
 
   inspectTouch(point: Point): boolean {

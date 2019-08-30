@@ -60,7 +60,7 @@ class TrashPiece extends AbstractEventDrivenElements {
   // define the action at bound the edge 
   reachbound(width:number , height:number):void {
     const {x, y} = this.location
-
+    
     if(y >= height) {
       this.clearY()
     }
@@ -78,6 +78,7 @@ class TrashPiece extends AbstractEventDrivenElements {
     this.velocity.y = 0
     this.location.y = 0
   }
+  
   getLocation():Point {
     return this.location
   }

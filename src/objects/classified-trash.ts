@@ -72,8 +72,8 @@ class ClassifiedTrash  extends AbstractEventDrivenElements {
 
 
   showTips(){
-    this.showModel(90,90,this.imageWrong)
-    
+    //this.showModel(90,90,this.imageWrong)
+    this.showPrompt("这算哪门子垃圾","请勿丢进垃圾桶",this.image)
     this.setLocation(this.originalLocation)
     console.log(this)
     

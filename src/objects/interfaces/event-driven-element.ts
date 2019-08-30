@@ -1,6 +1,7 @@
 import GameElement from './game-element'
 import Point from '../point'
 import ShowPopup from './show-popup'
+import ShowPrompt from './show-prompt'
 
 export default interface EventDrivenElement extends GameElement {
   onTouchStart(e: TouchEvent):void
@@ -11,7 +12,7 @@ export default interface EventDrivenElement extends GameElement {
   getIsTouching():boolean 
   setTouching(touch:boolean):void
   injectPopup(popup:ShowPopup):void
-
+  injectPrompt(prompt:ShowPrompt)
   getOutline():Point;
   setOutline(outline:Point):void
 

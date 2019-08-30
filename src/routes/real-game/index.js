@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ClassifiedTrashBin from '../../objects/classified-trash-bin';
 import ClassifiedTrash from '../../objects/classified-trash';
-import Popup from '../../objects/popup';
 import img_banana from '../../assets/banana.jpg'
 import TrashGame from '../../objects/trash-game';
 
@@ -75,12 +74,13 @@ class RealGame extends Component {
   initialStageOne() {
     this.game = new TrashGame(this.canvas) 
     const piece = new TrashPiece({x: Math.random()*100, y: Math.random() * 100},{x:2,y:2}, {x:0,y:0},{x:0, y: 0})
-    piece.applyForce({x: 0, y:100})
+    piece.applyForce({x: 0, y:0.5})
     this.game.addElement(piece)
     this.game.render()
   }
-
+ 
   initialize(mark) {
+    console.log(img_t1)
     this.game = new TrashGame(this.canvas)
     
     const t1 = new HarmfulTrashBin(10,[img_t1,img_t1_1],
@@ -123,7 +123,6 @@ class RealGame extends Component {
     this.game.addTrashBin(t3)
     this.game.addTrashBin(t4)
 
-    
     this.game.render()
   }
 
