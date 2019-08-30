@@ -34,7 +34,6 @@ class RoundWidget extends AbstractWidget {
       this.next()
       return
     }
-
     this.onGameOver && this.onGameOver()
   }
 

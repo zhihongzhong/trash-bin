@@ -23,14 +23,14 @@ import * as  img_prompt2 from '../assets/prompt.jpg'
 import * as  img_gongyi from '../assets/gongyi.png'
 import * as  img_story from '../assets/story.png'
 
-import * as  img_C2 from '../assets/C2.1.png'
 
 import * as  img_p1 from '../assets/p1.png'
 import * as  img_p2 from '../assets/p2.png'
 import * as  img_p3 from '../assets/p3.png'
 import * as  img_p4 from '../assets/p4.png'
 
-import * as img_wrong from '../assets/wrongbg.jpg'
+import * as bg_music from '../assets/bg-song.m4a'
+
 import * as img_coin from '../assets/coin.png'
 
 import TrashGame from './scenes/trash-game'
@@ -45,6 +45,7 @@ import RoundWidget from './widgets/round-widget';
 
 import DynamicResource from './interfaces/dynamic-resource'
 import StandDynamicResource from './functionalities/stand-dynamic-resource';
+import GuideWidget from './widgets/guide-widget';
 
 // this class is responsable for:
 // resource loading 
@@ -61,17 +62,23 @@ class RoundRobinGameScene implements GameScene {
   trash:ClassifiedTrash
   dynamics: DynamicResource[]
 
+  audio:HTMLAudioElement
+
   controller:number 
   round:number 
   mark:number 
   total:number 
+  
+  play:boolean;
 
-  constructor( dynamics: DynamicResource[],total:number) {
+  constructor( dynamics: DynamicResource[],total:number,audio:HTMLAudioElement) {
       this.dynamics = dynamics
       this.controller = 1
       this.total = total
       this.mark = 0
       this.round = 0
+      this.audio = audio
+      this.play = true
   } 
 
   initialize(canvas: HTMLCanvasElement): void {
@@ -81,7 +88,15 @@ class RoundRobinGameScene implements GameScene {
     this.loadDynamicScene()
   }  
 
-  
+  controlPlay() {
+    if(this.play) {
+      this.audio.pause()
+    }else {
+      this.audio.play()
+    }
+
+    this.play = !this.play
+  }
   // load static resource 
   private initializeScene():void {
 
@@ -99,7 +114,7 @@ class RoundRobinGameScene implements GameScene {
       new Point(77, 78),new Point(20, 20)
     ,img_p4)
 
-    const musicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff)
+    const musicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
     const tipWidget = new TipWidget(new Point(85,12),new Point(15,5),img_prompt,img_prompt2)
     const storyWidget = new TipWidget(new Point(85,20), new Point(15,5),img_gongyi,img_story)
     const markWidget = new MarkWidget(new Point(4,4),new Point(22,5),img_coin, this.mark)
@@ -107,7 +122,9 @@ class RoundRobinGameScene implements GameScene {
     const bg1 = new Background(new Point(0,  0),new Point(100, 100),img_bg)
     const bg2 = new Background(new Point(0,  70),new Point(100,30),img_bot)
     
-    const roundWidget = new RoundWidget(this.total,this.nextRound.bind(this))
+    const roundWidget = new RoundWidget(this.total,this.nextRound.bind(this),this.gameOver.bind(this))
+
+    const guideWidget = new GuideWidget(new Point(0,0), new Point(100,100))
 
     this.game.addBackground(bg1)
     this.game.addBackground(bg2)
@@ -123,7 +140,9 @@ class RoundRobinGameScene implements GameScene {
     this.game.addTrashBin(t3)
     this.game.addTrashBin(t4)
 
-    this.game.render()
+    this.game.addElement(guideWidget)
+
+    this.game.start()
   }
 
 
@@ -149,7 +168,6 @@ class RoundRobinGameScene implements GameScene {
       )
     
       this.game.addTrash(this.trash)
-    //this.trash = new ClassifiedTrash(10, new Point(40,30),new Point(35, 20),img_C2, img_wrong)
   }
 
   private nextRound():void {
@@ -160,12 +178,18 @@ class RoundRobinGameScene implements GameScene {
     this.loadDynamicScene()
   }
   
+  private gameOver():void {
+    this.game.stop()
+  }
   
-  
+  loop():void {
+
+  }
+
   start(): void {
     switch(this.controller) {
       default:
-
+        
     }
   }
 

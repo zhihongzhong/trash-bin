@@ -18,8 +18,6 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
     this.outline = new Point( outline.x, outline.y)
   }
 
- 
-  
   abstract onTouchStart(e: TouchEvent): void;
   abstract onTouchMove(e: TouchEvent): void;
   abstract onTouchEnd(e: TouchEvent): void;
@@ -82,7 +80,6 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
   inspectTouch(point: Point): boolean {
     return this.in(point)
   }
-
 
   drawImage(ctx:CanvasRenderingContext2D, image:HTMLImageElement) {
     ctx.drawImage(image, this.location.x, this.location.y,this.outline.x, this.outline.y)

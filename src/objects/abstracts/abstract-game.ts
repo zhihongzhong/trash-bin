@@ -1,16 +1,15 @@
-import GameElement from '../interfaces/game-element'
 import EventDrivenElement from '../interfaces/event-driven-element'
 import Point from '../functionalities/point';
 import AbstractBackground from '../interfaces/abstract-background';
 import StandPopup from '../functionalities/stand-popup';
-import ShowPopup from '../interfaces/show-popup';
 import RichTextPrompt from '../functionalities/rich-text-prompt';
-import ShowPrompt from '../interfaces/show-prompt';
+
 
 // this is a abstract game scene object for 
 // rendering static object 
 // and cannot be used by any component 
 abstract class AbstractGame {
+
   private canvas: HTMLCanvasElement 
   protected ctx: CanvasRenderingContext2D
   private width: number 
@@ -30,6 +29,8 @@ abstract class AbstractGame {
   private prompt:RichTextPrompt
 
   private incrementID:number 
+
+  private controlRender:boolean 
   // get wp and wh based on device scale
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas 
@@ -51,6 +52,7 @@ abstract class AbstractGame {
 
     this.incrementID = 0
     
+
     this.width = winWidth
     this.height = winHeight
     this.wp = this.width / 100
@@ -64,6 +66,8 @@ abstract class AbstractGame {
 
     this.prompt.setWidghRatio(this.wp)
     this.prompt.setHeightRatio(this.hp)
+
+    this.controlRender = false
 
     if(this.ctx === null || this.canvas === null) {
       throw new Error("failed to create canvas, check the canvas argument")
@@ -113,6 +117,15 @@ abstract class AbstractGame {
 
   }
 
+  start() {
+    this.controlRender = true
+    this.render()
+  }
+
+  stop() {
+    this.controlRender = false
+  }
+
   addBackground(background: AbstractBackground): void {
     let outline:Point = background.getOutline()
     let location:Point = background.getLocation()
@@ -141,7 +154,8 @@ abstract class AbstractGame {
     })
   }
 
-  render():void {
+
+  private render():void {
    const ctx: CanvasRenderingContext2D = this.ctx
    
    // render background first 
@@ -153,7 +167,7 @@ abstract class AbstractGame {
 
    this.popup.draw(ctx)
    this.prompt.draw(ctx)
-   requestAnimationFrame(this.render.bind(this))
+   if(this.controlRender) requestAnimationFrame(this.render.bind(this))
   }
 
   // 0 ~ 100 
@@ -205,7 +219,7 @@ abstract class AbstractGame {
       }
       i += 1
       if(!this.interruptStartTimer && i <= this.elements.length-1) {
-        setTimeout(_internalHandleCanvasTouchStart,10)
+        setTimeout(_internalHandleCanvasTouchStart,5)
       }
         
     }
@@ -234,7 +248,7 @@ abstract class AbstractGame {
       }
       i+=1 
       if(!this.interruptMoveTimer && i <= this.elements.length-1)
-        setTimeout(_internalHandleCanvasTouchMove,10)
+        setTimeout(_internalHandleCanvasTouchMove,5)
     }
     
     _internalHandleCanvasTouchMove()
@@ -261,7 +275,7 @@ abstract class AbstractGame {
       }
       i +=1
       if(!this.interruptEndTimer && i <= this.elements.length-1) {
-        setTimeout(_internalHandleCanvasTouchEnd, 10);
+        setTimeout(_internalHandleCanvasTouchEnd, 5);
       }
     }
 
