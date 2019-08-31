@@ -20,6 +20,7 @@ class MusicWidget extends AbstractWidget {
     this.rotating = true
     this.control = control
   }
+  
   onClick(e: TouchEvent): void {
     this.rotating = !this.rotating
     this.control()

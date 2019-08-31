@@ -50,14 +50,17 @@ import CatchingTrachBin from './elements/catching-trash-bin';
 import StartButtonWidget from './widgets/start-button-widget';
 
 // this class is responsable for:
-// resource loading 
-// global logic control 
+// LOADING RESOURCE 
+// AND CONTROLLING GLOBAL LOGICS
 // the thinking of game scene:
-// 
+//
 // initialize game scenes
 // although this class is called suffix 'GameScene',
-// and is has no any relation with game scene relative 
+// and is has no any relation with game scene relatED 
  
+// startMenu: a scene object of very beginning of the game 
+// game: the main scene ob the game 
+// there should be a end scene object to render the end of the game 
 class RoundRobinGameScene implements GameScene {
   startMenu:TrashGame
   game:TrashGame
@@ -92,15 +95,18 @@ class RoundRobinGameScene implements GameScene {
     this.loadDynamicScene()
   }  
 
-  controlPlay() {
+  controlPlay():void {
+    
     if(this.play) {
+      console.log("pause")
       this.audio.pause()
+      this.play = false
     }else {
       this.audio.play()
+      this.play = true
     }
-
-    this.play = !this.play
   }
+
   // load static resource 
   private initializeScene():void {
 
@@ -118,6 +124,11 @@ class RoundRobinGameScene implements GameScene {
       new Point(77, 78),new Point(20, 20)
     ,img_p4)
 
+    // @caution: 
+    // to fix the bug in IOS broswer that request not allowed, 
+    // the music widget must be in front of ANY component besides the background 
+    // cause backgrounds component is not in component stack but another 
+    // and a background component doesn't receive ANY event 
     const musicWidget:MusicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
     const startMusicWidget:MusicWidget =new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
     const tipWidget:TipWidget = new TipWidget(new Point(85,12),new Point(15,5),img_prompt,img_prompt2)
@@ -137,13 +148,12 @@ class RoundRobinGameScene implements GameScene {
     const catchingTrashBin:CatchingTrachBin = new CatchingTrachBin(new Point(40,40), new Point(20,20),img_crow)
     
     
-    // this.startMenu.addBackground(bg1)
-    // this.startMenu.addBackground(bg2)
     this.startMenu.addBackground(bg3)
-    this.startMenu.addTrashBin(catchingTrashBin)
-    this.startMenu.addElement(startMusicWidget)
-    this.startMenu.addElement(startButtonWidget)
 
+    this.startMenu.addElement(startMusicWidget)
+    this.startMenu.addTrashBin(catchingTrashBin)
+    this.startMenu.addElement(startButtonWidget)
+    
     this.game.addBackground(bg1)
     this.game.addBackground(bg2)
     
@@ -167,13 +177,14 @@ class RoundRobinGameScene implements GameScene {
   // a image may be received 
   // dynamic load element 
   // before loading dynamic element 
-  // the original dynamic should be destoried 
+  // the previous dynamic resource should be destroied 
+  // or there will be two identical components in current scene 
   private destroyTrash() {
     this.game.destroyTrash(this.trash)
   }
 
+  // the same as above
   private loadDynamicScene():void {
-    
     const standardDynamicResource:StandDynamicResource = this.dynamics[this.round]
     this.trash = null 
     this.trash = new ClassifiedTrash(
@@ -182,14 +193,13 @@ class RoundRobinGameScene implements GameScene {
       new Point(35,20),
       standardDynamicResource.imageStr,
       standardDynamicResource.tipTitle,
-       standardDynamicResource.content
+      standardDynamicResource.content
       )
     
       this.game.addTrash(this.trash)
   }
 
   private nextRound():void {
-    console.log("a new round started")
     this.round += 1
     this.mark = this.game.mark.getMark()
     this.destroyTrash()
@@ -200,12 +210,8 @@ class RoundRobinGameScene implements GameScene {
     this.game.stop()
   }
   
-  loop():void {
-
-  }
-
-  nextScene():void {
-    
+  // responsable for controlling to render the scene of the game
+  nextScene():void {  
     this.controller += 1
     this.start()
   }
@@ -214,7 +220,6 @@ class RoundRobinGameScene implements GameScene {
     switch(this.controller) {
       default:
         break
-
         case 1:
           this.game.stop()
           this.startMenu.start()
@@ -226,6 +231,7 @@ class RoundRobinGameScene implements GameScene {
     }
   }
 
+  // destroy all game resources, release memory 
   destory(): void {
     
   }

@@ -39,7 +39,10 @@ class StartButtonWidget extends AbstractWidget {
 
     ctx.drawImage(this.image, currentLocation.x, currentLocation.y, currentOutline.x, currentOutline.y)
 
-    
+    const font = `${this.amount + 15}px "微软雅黑"`
+    ctx.textAlign = "center"
+    ctx.font = font
+    ctx.fillText("开始",currentLocation.x + currentOutline.x / 2, currentLocation.y + currentOutline.y / 2 + (this.amount+10) / 2)
     if(this.amount >= 10 || this.amount <= 0) 
       this.increment = -this.increment
 
