@@ -31,6 +31,7 @@ abstract class AbstractGame {
   private incrementID:number 
 
   private controlRender:boolean 
+
   // get wp and wh based on device scale
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas 
@@ -191,8 +192,10 @@ abstract class AbstractGame {
   abstract onTouchMove(e: TouchEvent):void;
   abstract onTouchEnd(e:TouchEvent):void;
 
+  
   handleCanvasTouchStart(e: TouchEvent):void {
-    
+    if(!this.controlRender) return
+
     this.onTouchStart(e)
     const x = e.changedTouches[0].clientX
     const y = e.changedTouches[0].clientY
@@ -228,7 +231,7 @@ abstract class AbstractGame {
   }
 
   handleCanvasTouchMove(e: TouchEvent):void {
-    
+    if(!this.controlRender) return 
     this.onTouchMove(e)
 
     let ne:TouchEvent = e 
@@ -255,7 +258,7 @@ abstract class AbstractGame {
   }
 
  handleCanvsToucheEnd(e: TouchEvent):void {
-
+  if(!this.controlRender) return 
 
   this.onTouchEnd(e)
 

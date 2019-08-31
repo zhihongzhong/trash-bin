@@ -6,7 +6,7 @@ import * as img_prompt from '../../assets/wrongbg.jpg'
 import AbstractPrompt from "../interfaces/abstract-prompt"
 // system-level component 
 // only be calld by 'game' object 
-// any component that extends AbstractEventDrivenElement 
+// any component that extends AbstractEventDrivenElement  which wanna show a model 
 // must call the interface provided by 'System' aslo named 'Game' object 
 
 class RichTextPrompt extends AbstractEventDrivenElements implements AbstractPrompt {

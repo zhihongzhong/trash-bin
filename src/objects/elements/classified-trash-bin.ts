@@ -13,7 +13,7 @@ abstract class ClassifiedTrashBin extends AbstractTrashBin {
   private throwing: boolean 
   private falling: boolean
 
-  private offsetY:number 
+  
 
   constructor(id:number, imagesSrc:string[], location: Point, outline: Point) {
     super(location,outline)
@@ -27,7 +27,7 @@ abstract class ClassifiedTrashBin extends AbstractTrashBin {
     this.currentImage = this.images[0]
     this.throwing = false 
     this.falling = false
-    this.offsetY = 0
+    
   }
   
   onTouchStart(e: TouchEvent): void {
@@ -85,18 +85,7 @@ abstract class ClassifiedTrashBin extends AbstractTrashBin {
     perform(callback)
   }
 
-  objectIn(piece: ClassifiedTrash) {
-    const x = piece.location.x + piece.outline.x / 2
-    const y = piece.location.y + piece.outline.y 
-
-    if(x >= this.location.x && x <= this.location.x + this.outline.x){
-      if(y >= this.location.y && y <= this.location.y + this.outline.y- this.offsetY)
-      {
-        return true 
-      }
-    }
-    return false
-  }
+  
 }
 
 
