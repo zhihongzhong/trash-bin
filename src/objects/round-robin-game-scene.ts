@@ -29,9 +29,9 @@ import * as  img_p2 from '../assets/p2.png'
 import * as  img_p3 from '../assets/p3.png'
 import * as  img_p4 from '../assets/p4.png'
 
-import * as bg_music from '../assets/bg-song.m4a'
-
 import * as img_coin from '../assets/coin.png'
+import * as img_crow from '../assets/crow.png'
+import * as img_fillcolor from '../assets/fillcolor.png'
 
 import TrashGame from './scenes/trash-game'
 import HarmfulTrashBin from './elements/harmful-trash-bin';
@@ -46,6 +46,8 @@ import RoundWidget from './widgets/round-widget';
 import DynamicResource from './interfaces/dynamic-resource'
 import StandDynamicResource from './functionalities/stand-dynamic-resource';
 import GuideWidget from './widgets/guide-widget';
+import CatchingTrachBin from './elements/catching-trash-bin';
+import StartButtonWidget from './widgets/start-button-widget';
 
 // this class is responsable for:
 // resource loading 
@@ -57,7 +59,7 @@ import GuideWidget from './widgets/guide-widget';
 // and is has no any relation with game scene relative 
  
 class RoundRobinGameScene implements GameScene {
-
+  startMenu:TrashGame
   game:TrashGame
   trash:ClassifiedTrash
   dynamics: DynamicResource[]
@@ -83,6 +85,8 @@ class RoundRobinGameScene implements GameScene {
 
   initialize(canvas: HTMLCanvasElement): void {
     this.game = new TrashGame(canvas)
+    this.startMenu = new TrashGame(canvas)
+
     this.trash = null
     this.initializeScene()
     this.loadDynamicScene()
@@ -114,21 +118,35 @@ class RoundRobinGameScene implements GameScene {
       new Point(77, 78),new Point(20, 20)
     ,img_p4)
 
-    const musicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
-    const tipWidget = new TipWidget(new Point(85,12),new Point(15,5),img_prompt,img_prompt2)
-    const storyWidget = new TipWidget(new Point(85,20), new Point(15,5),img_gongyi,img_story)
-    const markWidget = new MarkWidget(new Point(4,4),new Point(22,5),img_coin, this.mark)
+    const musicWidget:MusicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
+    const startMusicWidget:MusicWidget =new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
+    const tipWidget:TipWidget = new TipWidget(new Point(85,12),new Point(15,5),img_prompt,img_prompt2)
+    const storyWidget:TipWidget = new TipWidget(new Point(85,20), new Point(15,5),img_gongyi,img_story)
+    const markWidget:MarkWidget = new MarkWidget(new Point(4,4),new Point(22,5),img_coin, this.mark)
+    const startButtonWidget:StartButtonWidget = new StartButtonWidget(new Point(40,70), new Point(20,3),img_fillcolor,this.nextScene.bind(this))
 
-    const bg1 = new Background(new Point(0,  0),new Point(100, 100),img_bg)
-    const bg2 = new Background(new Point(0,  70),new Point(100,30),img_bot)
+    const bg1:Background = new Background(new Point(0,  0),new Point(100, 100),img_bg)
+    const bg2:Background = new Background(new Point(0,  70),new Point(100,30),img_bot)
     
-    const roundWidget = new RoundWidget(this.total,this.nextRound.bind(this),this.gameOver.bind(this))
+    const bg3:Background = new Background(new Point(0,0), new Point(100,100), img_bg)
 
-    const guideWidget = new GuideWidget(new Point(0,0), new Point(100,100))
+    const roundWidget:RoundWidget = new RoundWidget(this.total,this.nextRound.bind(this),this.gameOver.bind(this))
+
+    const guideWidget:GuideWidget = new GuideWidget(new Point(0,0), new Point(100,100))
+
+    const catchingTrashBin:CatchingTrachBin = new CatchingTrachBin(new Point(40,40), new Point(20,20),img_crow)
+    
+    
+    // this.startMenu.addBackground(bg1)
+    // this.startMenu.addBackground(bg2)
+    this.startMenu.addBackground(bg3)
+    this.startMenu.addTrashBin(catchingTrashBin)
+    this.startMenu.addElement(startMusicWidget)
+    this.startMenu.addElement(startButtonWidget)
 
     this.game.addBackground(bg1)
     this.game.addBackground(bg2)
-
+    
     this.game.addElement(musicWidget)
     this.game.addElement(tipWidget)
     this.game.addElement(storyWidget)
@@ -139,10 +157,10 @@ class RoundRobinGameScene implements GameScene {
     this.game.addTrashBin(t2)
     this.game.addTrashBin(t3)
     this.game.addTrashBin(t4)
-
+    
     this.game.addElement(guideWidget)
 
-    this.game.start()
+    this.startMenu.start()
   }
 
 
@@ -186,10 +204,25 @@ class RoundRobinGameScene implements GameScene {
 
   }
 
+  nextScene():void {
+    
+    this.controller += 1
+    this.start()
+  }
+
   start(): void {
     switch(this.controller) {
       default:
-        
+        break
+
+        case 1:
+          this.game.stop()
+          this.startMenu.start()
+          break
+        case 2:
+          this.startMenu.stop()
+          this.game.start()
+          break
     }
   }
 

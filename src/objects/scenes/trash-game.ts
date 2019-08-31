@@ -3,10 +3,11 @@ import ClassifiedTrashBin from '../elements/classified-trash-bin';
 import ClassifiedTrash from '../elements/classified-trash';
 import MarkWidget from '../widgets/mark-widget';
 import RoundWidget from '../widgets/round-widget';
+import AbstractTrashBin from '../abstracts/abstract-trash-bin';
 
 class TrashGame extends AbstractGame {
   
-  bins:ClassifiedTrashBin[]
+  bins:AbstractTrashBin[]
   trashes:ClassifiedTrash[]
   mark:MarkWidget
   round:RoundWidget
@@ -28,7 +29,7 @@ class TrashGame extends AbstractGame {
     this.trashes.push(trash)
   }
 
-  addTrashBin(bin: ClassifiedTrashBin): void {
+  addTrashBin(bin: AbstractTrashBin): void {
     super.addElement(bin)
     this.bins.push(bin)
   }
