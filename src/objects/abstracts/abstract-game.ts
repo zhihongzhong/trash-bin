@@ -3,6 +3,7 @@ import Point from '../functionalities/point';
 import AbstractBackground from '../interfaces/abstract-background';
 import StandPopup from '../functionalities/stand-popup';
 import RichTextPrompt from '../functionalities/rich-text-prompt';
+import EventHandler from '../interfaces/event-handler';
 
 
 // this is a abstract game scene object for 
@@ -89,8 +90,8 @@ abstract class AbstractGame {
   }
 
   // @implements ShowPrompt interface
-  showRichTextPrompt(title:string, content:string,imgStr:HTMLImageElement):void {
-    this.prompt.showRichText(title,content,this.IW(90),this.IH(50),imgStr)
+  showRichTextPrompt(title:string, content:string,imgStr:HTMLImageElement,onClick?:EventHandler):void {
+    this.prompt.showRichText(title,content,this.IW(90),this.IH(50),imgStr,onClick)
   }
   // inject popup here 
   // correct the scale here 

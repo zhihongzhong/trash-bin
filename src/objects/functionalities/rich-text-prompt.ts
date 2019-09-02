@@ -4,6 +4,7 @@ import Point from './point'
 
 import * as img_prompt from '../../assets/wrongbg.jpg'
 import AbstractPrompt from "../interfaces/abstract-prompt"
+import EventHandler from "../interfaces/event-handler";
 // system-level component 
 // only be calld by 'game' object 
 // any component that extends AbstractEventDrivenElement  which wanna show a model 
@@ -20,11 +21,14 @@ class RichTextPrompt extends AbstractEventDrivenElements implements AbstractProm
   title:string
   content:string 
 
+  onClick:EventHandler
+
   constructor(location:Point, outline:Point) {
     super(location, outline)
     this.image = new Image() 
     this.image.src = img_prompt
     this.showing = false
+    this.onClick = null
     console.log(img_prompt)
   }
 
@@ -37,13 +41,15 @@ class RichTextPrompt extends AbstractEventDrivenElements implements AbstractProm
     //console.log(this)
   }
 
-  showRichText(title:string, content:string,width:number,height:number, img:HTMLImageElement):void {
+  showRichText(title:string, content:string,width:number,height:number, img:HTMLImageElement,onClick?:EventHandler):void {
     // do something
     this.title = title 
     this.content = content
     this.imageOutline = new Point(width, height)
     this.wrongImage = img
     this.showing = true
+    console.log(onClick)
+    this.onClick = onClick
   }
   // swipe the object from canvas using showing variable
   hide(): void {
@@ -55,6 +61,14 @@ class RichTextPrompt extends AbstractEventDrivenElements implements AbstractProm
     if(this.showing) {
       e.stopPropagation()
       this.hide()
+      console.log(this.onClick)
+
+      // after have used it, destroy it 
+      if(this.onClick) {
+        console.log("on click is avaliable")
+        this.onClick()
+        this.onClick = null
+      }
     }
   }  
 

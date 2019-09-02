@@ -64,6 +64,8 @@ import StartButtonWidget from './widgets/start-button-widget';
 class RoundRobinGameScene implements GameScene {
   startMenu:TrashGame
   game:TrashGame
+  over:TrashGame 
+
   trash:ClassifiedTrash
   dynamics: DynamicResource[]
 
@@ -89,6 +91,7 @@ class RoundRobinGameScene implements GameScene {
   initialize(canvas: HTMLCanvasElement): void {
     this.game = new TrashGame(canvas)
     this.startMenu = new TrashGame(canvas)
+    this.over = new TrashGame(canvas)
 
     this.trash = null
     this.initializeScene()
@@ -98,7 +101,6 @@ class RoundRobinGameScene implements GameScene {
   controlPlay():void {
     
     if(this.play) {
-      console.log("pause")
       this.audio.pause()
       this.play = false
     }else {
@@ -130,7 +132,9 @@ class RoundRobinGameScene implements GameScene {
     // cause backgrounds component is not in component stack but another 
     // and a background component doesn't receive ANY event 
     const musicWidget:MusicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
-    const startMusicWidget:MusicWidget =new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
+    const startMusicWidget:MusicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
+    const overMusicWidget:MusicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
+
     const tipWidget:TipWidget = new TipWidget(new Point(85,12),new Point(15,5),img_prompt,img_prompt2)
     const storyWidget:TipWidget = new TipWidget(new Point(85,20), new Point(15,5),img_gongyi,img_story)
     const markWidget:MarkWidget = new MarkWidget(new Point(4,4),new Point(22,5),img_coin, this.mark)
@@ -140,6 +144,8 @@ class RoundRobinGameScene implements GameScene {
     const bg2:Background = new Background(new Point(0,  70),new Point(100,30),img_bot)
     
     const bg3:Background = new Background(new Point(0,0), new Point(100,100), img_bg)
+    // background shows when game is over 
+    const bg4:Background = new Background(new Point(0,  0),new Point(100, 100),img_bg)
 
     const roundWidget:RoundWidget = new RoundWidget(this.total,this.nextRound.bind(this),this.gameOver.bind(this))
 
@@ -149,7 +155,7 @@ class RoundRobinGameScene implements GameScene {
     
     
     this.startMenu.addBackground(bg3)
-
+    
     this.startMenu.addElement(startMusicWidget)
     this.startMenu.addTrashBin(catchingTrashBin)
     this.startMenu.addElement(startButtonWidget)
@@ -170,6 +176,9 @@ class RoundRobinGameScene implements GameScene {
     
     this.game.addElement(guideWidget)
 
+    this.over.addBackground(bg4)
+    this.over.addElement(overMusicWidget)
+    
     this.startMenu.start()
   }
 
@@ -207,7 +216,8 @@ class RoundRobinGameScene implements GameScene {
   }
   
   private gameOver():void {
-    this.game.stop()
+    this.controller +=1 
+    this.start()
   }
   
   // responsable for controlling to render the scene of the game
@@ -221,13 +231,19 @@ class RoundRobinGameScene implements GameScene {
       default:
         break
         case 1:
+          this.over.stop()
           this.game.stop()
           this.startMenu.start()
           break
         case 2:
           this.startMenu.stop()
+          this.over.stop()
           this.game.start()
           break
+        case 3:
+          this.startMenu.stop()
+          this.game.stop()
+          this.over.start()
     }
   }
 

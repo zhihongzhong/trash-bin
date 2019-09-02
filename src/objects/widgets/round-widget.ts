@@ -1,5 +1,7 @@
 import AbstractWidget from "../abstracts/abstract-widget";
 import Point from "../functionalities/point";
+import ClassifiedTrash from "../elements/classified-trash";
+import EventHandler from "../interfaces/event-handler";
 
 interface OnGameOver {
   ():void
@@ -28,16 +30,41 @@ class RoundWidget extends AbstractWidget {
   }
 
 
-  nextRound():void{
+  private showTips(piece: ClassifiedTrash,onClick?:EventHandler):void{
+    this.showPrompt(piece.getTitle(), piece.getContent(), piece.getImage(),onClick)
+    piece.normalLocation()
+  }
+
+  private nextRound():void{
     if(!this.over()){
       this.currentRound +=1
       this.next()
-      return
+      return 
     }
     this.onGameOver && this.onGameOver()
   }
 
-  over():boolean {
+  correctStep() {
+    this.nextRound()
+  }
+
+  incorrectStep(piece: ClassifiedTrash) {
+    if(!this.over()) {
+      this.showTips(piece)
+      this.nextRound()
+      return
+    }
+
+    this.gameOver(piece)
+  }
+
+  private gameOver(piece: ClassifiedTrash) {
+    console.log("game is over, and show tips")
+    this.showTips(piece,this.onGameOver)
+    return
+  }
+
+  private over():boolean {
     return this.currentRound >= this.totalRound
   }
 
