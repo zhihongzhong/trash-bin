@@ -25,7 +25,7 @@ class HarmfulTrashBin extends ClassifiedTrashBin {
       // do something correct
       mark.add(100)
       this.backToNormal()
-      round.correctStep()
+      round.correctStep(piece)
     
     }
     else {

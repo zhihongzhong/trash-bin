@@ -2,6 +2,7 @@ import AbstractTrash from '../interfaces/abstract-trash'
 import Point from '../functionalities/point';
 
 import AbstractEventDrivenElements from '../abstracts/abstract-event-driven-element';
+import DynamicResource from '../interfaces/dynamic-resource';
 
 class ClassifiedTrash  extends AbstractEventDrivenElements {
 
@@ -9,28 +10,28 @@ class ClassifiedTrash  extends AbstractEventDrivenElements {
 
   id: number
 
-  private title:string
-  private content:string 
 
   private touchStartX:number 
   private touchStartY:number 
   private originalLocation:Point 
-  constructor(id:number, location: Point, outline:Point, imageStr: string,title:string, content:string) {
+  gameResource:DynamicResource
+
+  constructor(id:number, location: Point, outline:Point, gameResource:DynamicResource) {
     super(location, outline)
 
     this.id = id 
     this.image = new Image()
-    this.image.src = imageStr 
+    this.image.src = gameResource.imageStr 
     
     this.originalLocation = new Point(0,0 )
 
-    this.content = content
-    this.title = title
+    this.gameResource = gameResource
 
     this.touchStartX = 0
     this.touchStartY = 0
 
   }
+
   
   afterAddToContainer() {
     super.afterAddToContainer()
@@ -45,6 +46,7 @@ class ClassifiedTrash  extends AbstractEventDrivenElements {
   }
 
   onTouchMove(e: TouchEvent): void {
+  
     const x = e.changedTouches[0].clientX 
     const y = e.changedTouches[0].clientY
 
@@ -54,7 +56,7 @@ class ClassifiedTrash  extends AbstractEventDrivenElements {
   }
 
   onTouchEnd(e: TouchEvent): void {
-
+    //e.stopPropagation()
     // throw new Error("Method not implemented.");
   }
 
@@ -78,21 +80,17 @@ class ClassifiedTrash  extends AbstractEventDrivenElements {
   }
 
   getTitle():string {
-    return this.title
+    return this.gameResource.tipTitle
   }
 
   getContent():string {
-    return this.content
+    return this.gameResource.content
   }
 
   getImage():HTMLImageElement {
     return this.image
   }
 
-  showTips(){
-    // this.showPrompt(this.title,this.content,this.image)
-    // this.normalLocation()
-  }
 
   clearY(): void {
     this.location.y = 0 

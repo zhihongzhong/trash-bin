@@ -48,6 +48,7 @@ import StandDynamicResource from './functionalities/stand-dynamic-resource';
 import GuideWidget from './widgets/guide-widget';
 import CatchingTrachBin from './elements/catching-trash-bin';
 import StartButtonWidget from './widgets/start-button-widget';
+import SettlementWidget from './widgets/settlement-widget';
 
 // this class is responsable for:
 // LOADING RESOURCE 
@@ -64,7 +65,7 @@ import StartButtonWidget from './widgets/start-button-widget';
 class RoundRobinGameScene implements GameScene {
   startMenu:TrashGame
   game:TrashGame
-  over:TrashGame 
+  settlement:TrashGame 
 
   trash:ClassifiedTrash
   dynamics: DynamicResource[]
@@ -91,7 +92,7 @@ class RoundRobinGameScene implements GameScene {
   initialize(canvas: HTMLCanvasElement): void {
     this.game = new TrashGame(canvas)
     this.startMenu = new TrashGame(canvas)
-    this.over = new TrashGame(canvas)
+    this.settlement = new TrashGame(canvas)
 
     this.trash = null
     this.initializeScene()
@@ -132,13 +133,14 @@ class RoundRobinGameScene implements GameScene {
     // cause backgrounds component is not in component stack but another 
     // and a background component doesn't receive ANY event 
     const musicWidget:MusicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
-    const startMusicWidget:MusicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
-    const overMusicWidget:MusicWidget = new MusicWidget(new Point(85,5),new Point(15,5),img_sndon,img_sndoff,this.controlPlay.bind(this))
 
     const tipWidget:TipWidget = new TipWidget(new Point(85,12),new Point(15,5),img_prompt,img_prompt2)
     const storyWidget:TipWidget = new TipWidget(new Point(85,20), new Point(15,5),img_gongyi,img_story)
     const markWidget:MarkWidget = new MarkWidget(new Point(4,4),new Point(22,5),img_coin, this.mark)
     const startButtonWidget:StartButtonWidget = new StartButtonWidget(new Point(40,70), new Point(20,3),img_fillcolor,this.nextScene.bind(this))
+    
+    // used for list results 
+    const settlement:SettlementWidget = new SettlementWidget(new Point(0,0), new Point(60,60), this.dynamics)
 
     const bg1:Background = new Background(new Point(0,  0),new Point(100, 100),img_bg)
     const bg2:Background = new Background(new Point(0,  70),new Point(100,30),img_bot)
@@ -156,7 +158,7 @@ class RoundRobinGameScene implements GameScene {
     
     this.startMenu.addBackground(bg3)
     
-    this.startMenu.addElement(startMusicWidget)
+    this.startMenu.addElement(musicWidget)
     this.startMenu.addTrashBin(catchingTrashBin)
     this.startMenu.addElement(startButtonWidget)
     
@@ -176,8 +178,9 @@ class RoundRobinGameScene implements GameScene {
     
     this.game.addElement(guideWidget)
 
-    this.over.addBackground(bg4)
-    this.over.addElement(overMusicWidget)
+    this.settlement.addBackground(bg4)
+    this.settlement.addElement(musicWidget)
+    this.settlement.addElement(settlement)
     
     this.startMenu.start()
   }
@@ -200,9 +203,7 @@ class RoundRobinGameScene implements GameScene {
       standardDynamicResource.id, 
       new Point(40,30), 
       new Point(35,20),
-      standardDynamicResource.imageStr,
-      standardDynamicResource.tipTitle,
-      standardDynamicResource.content
+      standardDynamicResource
       )
     
       this.game.addTrash(this.trash)
@@ -231,19 +232,19 @@ class RoundRobinGameScene implements GameScene {
       default:
         break
         case 1:
-          this.over.stop()
+          this.settlement.stop()
           this.game.stop()
           this.startMenu.start()
           break
         case 2:
           this.startMenu.stop()
-          this.over.stop()
+          this.settlement.stop()
           this.game.start()
           break
         case 3:
           this.startMenu.stop()
           this.game.stop()
-          this.over.start()
+          this.settlement.start()
     }
   }
 

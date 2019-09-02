@@ -3,21 +3,15 @@ import Point from "../functionalities/point";
 import ClassifiedTrash from "../elements/classified-trash";
 import EventHandler from "../interfaces/event-handler";
 
-interface OnGameOver {
-  ():void
-}
 
-interface OnNextRound {
-  ():void
-}
 class RoundWidget extends AbstractWidget {
 
   totalRound:number 
   currentRound:number 
 
-  private onGameOver:OnGameOver
-  private next:OnNextRound
-  constructor(total:number, nextRound?:OnNextRound, onGameOver?:OnGameOver){
+  private onGameOver:EventHandler
+  private next:EventHandler
+  constructor(total:number, nextRound?:EventHandler, onGameOver?:EventHandler){
     super(new Point(0,0), new Point(0,0), "")
     this.totalRound = total 
     this.currentRound = 1
@@ -44,11 +38,14 @@ class RoundWidget extends AbstractWidget {
     this.onGameOver && this.onGameOver()
   }
 
-  correctStep() {
+  correctStep(piece: ClassifiedTrash) {
+    piece.gameResource.setResult(true)
     this.nextRound()
   }
 
   incorrectStep(piece: ClassifiedTrash) {
+    piece.gameResource.setResult(false)
+
     if(!this.over()) {
       this.showTips(piece)
       this.nextRound()

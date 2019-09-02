@@ -7,4 +7,5 @@ export default interface AbstractBackground  {
 
   getLocation():Point;
   setLocation(location:Point):void;
+  getInjected():boolean;
 }

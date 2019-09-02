@@ -27,6 +27,7 @@ class StartButtonWidget extends AbstractWidget {
   }
 
   afterAddToContainer():void {
+    super.afterAddToContainer()
     this.maxLocation = new Point(this.location.x - 10, this.location.y -10)
     this.maxOutline = new Point(this.outline.x + 10, this.outline.y + 10 )
     this.minLocation = new Point(this.location.x ,this.location.y)

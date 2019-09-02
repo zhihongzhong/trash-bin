@@ -93,21 +93,27 @@ abstract class AbstractGame {
   showRichTextPrompt(title:string, content:string,imgStr:HTMLImageElement,onClick?:EventHandler):void {
     this.prompt.showRichText(title,content,this.IW(90),this.IH(50),imgStr,onClick)
   }
+  
   // inject popup here 
-  // correct the scale here 
+  // adjust the scale here
+  // usage of element.getInject:
+  // element got adjusteed in other container
+  // will not adjust size again  
   addElement(element: EventDrivenElement):void {
-    let outline:Point = element.getOutline()
-    let location:Point = element.getLocation()
-
-    outline.x = this.IW(outline.x)
-    outline.y = this.IH(outline.y)
-    location.x = this.IW(location.x)
-    location.y = this.IH(location.y)
-
-    element.setOutline(outline)
-    element.setLocation(location)
-    element.setWidghRatio(this.wp)
-    element.setHeightRatio(this.hp)
+    if(!element.getInjected()) {
+      let outline:Point = element.getOutline()
+      let location:Point = element.getLocation()
+  
+      outline.x = this.IW(outline.x)
+      outline.y = this.IH(outline.y)
+      location.x = this.IW(location.x)
+      location.y = this.IH(location.y)
+  
+      element.setOutline(outline)
+      element.setLocation(location)
+      element.setWidghRatio(this.wp)
+      element.setHeightRatio(this.hp)
+    }
 
     element.injectPrompt(this.showRichTextPrompt.bind(this))
     element.injectPopup(this.showPopup.bind(this))
