@@ -65,7 +65,6 @@ class RichTextPrompt extends AbstractEventDrivenElements implements AbstractProm
 
       // after have used it, destroy it 
       if(this.onClick) {
-        console.log("on click is avaliable")
         this.onClick()
         this.onClick = null
       }

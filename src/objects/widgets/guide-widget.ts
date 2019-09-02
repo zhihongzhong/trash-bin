@@ -12,6 +12,7 @@ class GuideWidget extends AbstractWidget {
   }
 
   afterAddToContainer() {
+    super.afterAddToContainer()
     this.offset= this.originalOffset = (this.location.y+this.outline.y) / 2
   }
 

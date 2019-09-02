@@ -12,7 +12,7 @@ export default interface EventDrivenElement extends GameElement {
   getIsTouching():boolean 
   setTouching(touch:boolean):void
   injectPopup(popup:ShowPopup):void
-  injectPrompt(prompt:ShowPrompt)
+  injectPrompt(prompt:ShowPrompt):void
   getOutline():Point;
   setOutline(outline:Point):void
 
@@ -26,5 +26,5 @@ export default interface EventDrivenElement extends GameElement {
   getHeightRatio():number 
   setWidghRatio(ratio:number):void
   setHeightRatio(ratio:number):void
-
+  getInjected():boolean;
 }

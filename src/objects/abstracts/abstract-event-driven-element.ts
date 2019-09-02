@@ -3,6 +3,8 @@ import Point from '../functionalities/point'
 import ShowPopup from "../interfaces/show-popup"
 import ShowPrompt from "../interfaces/show-prompt"
 abstract class AbstractEventDrivenElements implements EventDrivenElement {
+
+  
  
   location:Point
   outline:Point
@@ -12,6 +14,7 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
   protected widthRatio:number 
   protected heightRatio:number 
   private elementID:number 
+  private injected:boolean 
 
   constructor(location: Point, outline:Point) {
     this.location = new Point(location.x, location.y)
@@ -23,6 +26,10 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
   abstract onTouchEnd(e: TouchEvent): void;
   abstract draw(ctx: CanvasRenderingContext2D):void;
   abstract move(point: Point): void;
+
+  getInjected(): boolean {
+    return this.injected
+  }
 
   getID():number{
     return this.elementID
@@ -46,11 +53,11 @@ abstract class AbstractEventDrivenElements implements EventDrivenElement {
   }
   
   beforeAddToContainer():void{
-
+    
   }
   
   afterAddToContainer():void{
-
+    this.injected = true
   }
 
   getOutline(): Point {
