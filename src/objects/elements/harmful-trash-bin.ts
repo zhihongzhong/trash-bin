@@ -24,14 +24,13 @@ class HarmfulTrashBin extends ClassifiedTrashBin {
     if(piece.id === this.id) {
       // do something correct
       mark.add(100)
-      round.nextRound()
       this.backToNormal()
-      piece.normalLocation()
+      round.correctStep()
+    
     }
     else {
-      piece.showTips()
       this.backToNormal()
-      round.nextRound()
+      round.incorrectStep(piece)
     }
   }
 }

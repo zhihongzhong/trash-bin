@@ -76,12 +76,22 @@ class ClassifiedTrash  extends AbstractEventDrivenElements {
   normalLocation() {
     this.setLocation(this.originalLocation)
   }
+
+  getTitle():string {
+    return this.title
+  }
+
+  getContent():string {
+    return this.content
+  }
+
+  getImage():HTMLImageElement {
+    return this.image
+  }
+
   showTips(){
-    //this.showModel(90,90,this.imageWrong)
-    this.showPrompt(this.title,this.content,this.image)
-    this.normalLocation()
-    console.log(this)
-    
+    // this.showPrompt(this.title,this.content,this.image)
+    // this.normalLocation()
   }
 
   clearY(): void {
